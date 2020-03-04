@@ -1,4 +1,4 @@
-package pl.kornikkk.doctorappointments
+package pl.kornikkk.doctorappointments.application
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
