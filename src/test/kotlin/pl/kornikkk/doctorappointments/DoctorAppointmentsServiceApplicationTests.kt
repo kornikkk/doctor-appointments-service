@@ -1,4 +1,4 @@
-package pl.kornikkk.doctorappointments.application
+package pl.kornikkk.doctorappointments
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
