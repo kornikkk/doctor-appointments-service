@@ -14,7 +14,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/patients")
-class PatientController(private val patientService: PatientService) {
+class PatientRestController(private val patientService: PatientService) {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
