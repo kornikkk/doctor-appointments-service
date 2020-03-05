@@ -11,13 +11,13 @@ class PatientService(private val patientRepository: PatientRepository) {
             patientRepository.save(Patient(firstName, lastName, address))
 
     fun updatePatient(patient: Patient) {
-        if (patientRepository.findById(patient.personId) == null) {
+        if (patientRepository.findByPersonId(patient.personId) == null) {
             throw PatientNotFoundException(patient.personId)
         }
         patientRepository.save(patient)
     }
 
     fun getPatient(id: UUID): Patient =
-            patientRepository.findById(id) ?: throw PatientNotFoundException(id)
+            patientRepository.findByPersonId(id) ?: throw PatientNotFoundException(id)
 
 }

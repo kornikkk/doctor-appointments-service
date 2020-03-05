@@ -5,7 +5,7 @@ import pl.kornikkk.doctorappointments.domain.repository.PatientRepository
 import java.util.*
 
 class CrudPatientRepository(private val crudRepository: SpringDataCrudPatientRepository) : PatientRepository {
-    override fun findById(id: UUID) =
+    override fun findByPersonId(id: UUID) =
             crudRepository.findByPersonId(id.toString())?.toDomain()
 
     override fun save(patient: Patient): Patient {
