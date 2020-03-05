@@ -17,23 +17,23 @@ class PatientServiceTests : BehaviorSpec({
     val patientRepository: PatientRepository = mockk()
     val patientService = PatientService(patientRepository)
 
-    Given("new user data") {
+    Given("new patient data") {
         val firstName = "Test"
         val lastName = "User"
         val address = "Street 2/3 City"
 
         every { patientRepository.save(any()) } returns mockk()
 
-        When("creating user") {
+        When("creating patient") {
             patientService.createPatient(firstName, lastName, address)
 
-            Then("user is created") {
+            Then("patient is created") {
                 verify { patientRepository.save(any()) }
             }
         }
     }
 
-    Given("user ids") {
+    Given("patient ids") {
         val existingPatientId = UUID.randomUUID()
         val notExistingPatientId = UUID.randomUUID()
         val patient = mockk<Patient>()
@@ -41,19 +41,19 @@ class PatientServiceTests : BehaviorSpec({
         every { patientRepository.findByPersonId(existingPatientId) } returns patient
         every { patientRepository.findByPersonId(notExistingPatientId) } returns null
 
-        When("getting existing user") {
+        When("getting existing patient") {
             val foundPatient = patientService.getPatient(existingPatientId)
 
-            Then("user is found") {
+            Then("patient is found") {
                 foundPatient shouldBe patient
             }
         }
 
-        When("getting not existing user") {
+        When("getting not existing patient") {
             val exception = shouldThrow<PatientNotFoundException> {
                 patientService.getPatient(notExistingPatientId)
             }
-            Then("exception with id is thrown") {
+            Then("exception with patient id is thrown") {
                 exception.message shouldContain notExistingPatientId.toString()
             }
         }
