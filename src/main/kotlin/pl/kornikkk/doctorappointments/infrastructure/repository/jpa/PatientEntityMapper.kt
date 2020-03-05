@@ -1,4 +1,4 @@
-package pl.kornikkk.doctorappointments.infrastructure
+package pl.kornikkk.doctorappointments.infrastructure.repository.jpa
 
 import pl.kornikkk.doctorappointments.domain.Patient
 import java.util.*

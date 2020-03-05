@@ -1,4 +1,4 @@
-package pl.kornikkk.doctorappointments.application
+package pl.kornikkk.doctorappointments.application.service
 
 import org.springframework.boot.test.context.SpringBootTest
 

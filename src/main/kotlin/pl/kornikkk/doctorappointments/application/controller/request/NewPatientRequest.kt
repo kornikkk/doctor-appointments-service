@@ -1,4 +1,4 @@
-package pl.kornikkk.doctorappointments.application
+package pl.kornikkk.doctorappointments.application.controller.request
 
 data class NewPatientRequest(
         var firstName: String,

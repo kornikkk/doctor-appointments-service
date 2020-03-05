@@ -1,5 +1,6 @@
-package pl.kornikkk.doctorappointments.domain
+package pl.kornikkk.doctorappointments.domain.repository
 
+import pl.kornikkk.doctorappointments.domain.Patient
 import java.util.*
 
 interface PatientRepository {

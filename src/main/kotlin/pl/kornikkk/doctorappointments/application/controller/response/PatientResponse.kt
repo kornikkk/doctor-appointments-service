@@ -1,6 +1,6 @@
-package pl.kornikkk.doctorappointments.application
+package pl.kornikkk.doctorappointments.application.controller.response
 
-data class PatientDto(
+data class PatientResponse(
         var personId: String,
         var firstName: String,
         var lastName: String,

@@ -1,5 +1,8 @@
-package pl.kornikkk.doctorappointments.domain
+package pl.kornikkk.doctorappointments.domain.service
 
+import pl.kornikkk.doctorappointments.domain.Patient
+import pl.kornikkk.doctorappointments.domain.exception.PatientNotFoundException
+import pl.kornikkk.doctorappointments.domain.repository.PatientRepository
 import java.util.*
 
 class PatientService(private val patientRepository: PatientRepository) {

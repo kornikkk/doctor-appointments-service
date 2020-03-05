@@ -1,4 +1,4 @@
-package pl.kornikkk.doctorappointments.domain
+package pl.kornikkk.doctorappointments.domain.exception
 
 import java.util.*
 

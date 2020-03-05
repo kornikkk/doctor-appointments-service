@@ -1,4 +1,4 @@
-package pl.kornikkk.doctorappointments.application
+package pl.kornikkk.doctorappointments.application.controller
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import pl.kornikkk.doctorappointments.domain.PatientNotFoundException
-import pl.kornikkk.doctorappointments.domain.PatientService
+import pl.kornikkk.doctorappointments.application.controller.request.NewPatientRequest
+import pl.kornikkk.doctorappointments.application.controller.response.PatientResponse
+import pl.kornikkk.doctorappointments.domain.exception.PatientNotFoundException
+import pl.kornikkk.doctorappointments.domain.service.PatientService
 import java.util.*
 
 @RestController
@@ -18,20 +20,25 @@ class PatientController(private val patientService: PatientService) {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun newPatient(@RequestBody request: NewPatientRequest): ResponseEntity<*> {
+    fun newPatient(@RequestBody request: NewPatientRequest): ResponseEntity<Any> {
         val patient = patientService.createPatient(request.firstName, request.lastName, request.address)
 
-        return ResponseEntity.created(ServletUriComponentsBuilder
-                .fromCurrentRequest()
+        val location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{patientId}")
                 .buildAndExpand(patient.personId)
                 .toUri()
-        ).build<Any>()
+        return ResponseEntity.created(location).build()
     }
 
     @GetMapping("/{patientId}")
-    fun getPatient(@PathVariable patientId: String): ResponseEntity<PatientDto> =
-            ResponseEntity.ok(patientService.getPatient(UUID.fromString(patientId)).toDto())
+    fun getPatient(@PathVariable patientId: String): PatientResponse =
+            patientService.getPatient(UUID.fromString(patientId)).let {
+                PatientResponse(
+                        it.personId.toString(),
+                        it.firstName,
+                        it.lastName,
+                        it.address)
+            }
 
     @ExceptionHandler(PatientNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
