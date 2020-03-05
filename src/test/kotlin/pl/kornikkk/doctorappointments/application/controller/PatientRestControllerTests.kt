@@ -1,4 +1,4 @@
-package pl.kornikkk.doctorappointments.application.service
+package pl.kornikkk.doctorappointments.application.controller
 
 import com.ninjasquad.springmockk.MockkBean
 import io.kotlintest.specs.StringSpec
@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import pl.kornikkk.doctorappointments.application.controller.PatientRestController
 import pl.kornikkk.doctorappointments.domain.Patient
 import pl.kornikkk.doctorappointments.domain.service.PatientService
 import java.util.*
