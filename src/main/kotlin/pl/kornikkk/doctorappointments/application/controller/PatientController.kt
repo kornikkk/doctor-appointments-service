@@ -33,11 +33,7 @@ class PatientController(private val patientService: PatientService) {
     @GetMapping("/{patientId}")
     fun getPatient(@PathVariable patientId: String): PatientResponse =
             patientService.getPatient(UUID.fromString(patientId)).let {
-                PatientResponse(
-                        it.personId.toString(),
-                        it.firstName,
-                        it.lastName,
-                        it.address)
+                PatientResponse(it.personId.toString(), it.firstName, it.lastName, it.address)
             }
 
     @ExceptionHandler(PatientNotFoundException::class)

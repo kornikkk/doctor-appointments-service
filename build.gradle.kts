@@ -37,7 +37,9 @@ dependencies {
     }
     testImplementation("io.kotlintest:kotlintest-core:3.4.2")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
+    testImplementation("io.kotlintest:kotlintest-extensions-spring:3.4.2")
     testImplementation("io.mockk:mockk:1.9.3")
+    testImplementation("com.ninja-squad:springmockk:2.0.0")
 }
 
 tasks.withType<Test> {
