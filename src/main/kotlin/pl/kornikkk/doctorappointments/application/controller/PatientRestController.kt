@@ -1,6 +1,7 @@
 package pl.kornikkk.doctorappointments.application.controller
 
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -21,8 +22,7 @@ class PatientRestController(private val patientService: PatientService) : Loggin
 
     private val log = logger()
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun add(@RequestBody request: NewPatientRequest): ResponseEntity<Any> {
         val patient = patientService.createPatient(request.firstName, request.lastName, request.address)
 
@@ -33,7 +33,8 @@ class PatientRestController(private val patientService: PatientService) : Loggin
         return ResponseEntity.created(location).build()
     }
 
-    @GetMapping("/{patientId}")
+    @GetMapping("/{patientId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.OK)
     fun findById(@PathVariable patientId: UUID): PatientResponse =
             patientService.getPatient(patientId).let {
                 PatientResponse(
@@ -43,27 +44,32 @@ class PatientRestController(private val patientService: PatientService) : Loggin
                         it.address)
             }
 
-    @PutMapping("/{patientId}")
-    fun update(@PathVariable patientId: UUID, @RequestBody request: UpdatePatientRequest): ResponseEntity<String> {
+    @PutMapping("/{patientId}", consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun update(@PathVariable patientId: UUID, @RequestBody request: UpdatePatientRequest) {
         patientService.updatePatient(Patient(
                 patientId,
                 request.firstName,
                 request.lastName,
                 request.address
         ))
-        return ResponseEntity.ok("Patient updated")
     }
 
-    @PatchMapping("/{patientId}")
-    fun modify(@PathVariable patientId: UUID, @RequestBody request: ModifyPatientRequest): ResponseEntity<String> {
+    @PatchMapping("/{patientId}", consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun modify(@PathVariable patientId: UUID, @RequestBody request: ModifyPatientRequest) {
         val patient = patientService.getPatient(patientId)
         request.firstName?.let { patient.firstName = it }
         request.lastName?.let { patient.lastName = it }
         request.address?.let { patient.address = it }
 
         patientService.updatePatient(patient)
+    }
 
-        return ResponseEntity.ok("Patient updated")
+    @DeleteMapping("/{patientId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(@PathVariable patientId: UUID) {
+        patientService.deletePatient(patientId)
     }
 
     @ExceptionHandler(PatientNotFoundException::class)

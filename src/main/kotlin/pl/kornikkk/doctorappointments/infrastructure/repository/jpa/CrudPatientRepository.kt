@@ -11,4 +11,8 @@ class CrudPatientRepository(private val crudRepository: SpringDataCrudPatientRep
 
     override fun save(patient: Patient): Patient =
             crudRepository.save(patient.toEntity()).toDomain()
+
+    override fun deleteById(id: UUID) {
+        crudRepository.deleteById(id)
+    }
 }

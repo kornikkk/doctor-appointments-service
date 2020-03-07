@@ -17,4 +17,7 @@ class PatientServiceImpl(private val patientRepository: PatientRepository) : Pat
     override fun getPatient(id: UUID): Patient =
             patientRepository.findById(id) ?: throw PatientNotFoundException(id)
 
+    override fun deletePatient(id: UUID) {
+        patientRepository.deleteById(id)
+    }
 }

@@ -78,10 +78,10 @@ class PatientRestControllerTests : StringSpec() {
                     put("/patients/$personId")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(requestBody))
-                    .andExpect(status().isOk)
+                    .andExpect(status().is2xxSuccessful)
         }
 
-        "patiens GET should get patient" {
+        "patients GET should get patient" {
             val personId = UUID.randomUUID()
             val patient = mockk<Patient>(relaxed = true)
 
@@ -103,6 +103,16 @@ class PatientRestControllerTests : StringSpec() {
             mockMvc.perform(
                     get("/patients/$personId"))
                     .andExpect(status().isNotFound)
+        }
+
+        "patients DELETE should delete patient" {
+            val id = UUID.randomUUID()
+
+            every { service.deletePatient(id) } returns mockk()
+
+            mockMvc.perform(delete("/patients/$id"))
+                    .andExpect(status().is2xxSuccessful)
+
         }
     }
 }
