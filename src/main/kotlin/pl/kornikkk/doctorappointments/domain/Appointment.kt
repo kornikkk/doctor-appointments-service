@@ -5,11 +5,7 @@ import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import java.util.*
 
-class Appointment(val id: UUID?,
-                  val patientId: UUID,
-                  val doctorId: UUID,
-                  val location: String,
-                  dateTime: LocalDateTime) {
+class Appointment(val id: UUID?, val patientId: UUID, val doctorId: UUID, val location: String, dateTime: LocalDateTime) {
 
     private var _dateTime = dateTime.truncatedTo(ChronoUnit.MINUTES)
     val dateTime: LocalDateTime get() = _dateTime
