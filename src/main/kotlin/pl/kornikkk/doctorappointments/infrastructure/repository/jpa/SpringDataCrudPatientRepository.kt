@@ -2,8 +2,8 @@ package pl.kornikkk.doctorappointments.infrastructure.repository.jpa
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
-interface SpringDataCrudPatientRepository : CrudRepository<PatientEntity, Long> {
-    fun findByPersonId(personId: String): PatientEntity?
+interface SpringDataCrudPatientRepository : CrudRepository<PatientEntity, UUID> {
 }

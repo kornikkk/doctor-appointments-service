@@ -38,8 +38,8 @@ class PatientServiceTests : BehaviorSpec({
         val notExistingPatientId = UUID.randomUUID()
         val patient = mockk<Patient>()
 
-        every { patientRepository.findByPersonId(existingPatientId) } returns patient
-        every { patientRepository.findByPersonId(notExistingPatientId) } returns null
+        every { patientRepository.findById(existingPatientId) } returns patient
+        every { patientRepository.findById(notExistingPatientId) } returns null
 
         When("getting existing patient") {
             val foundPatient = patientService.getPatient(existingPatientId)

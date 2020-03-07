@@ -11,13 +11,13 @@ class PatientServiceImpl(private val patientRepository: PatientRepository) : Pat
             patientRepository.save(Patient(firstName, lastName, address))
 
     override fun updatePatient(patient: Patient) {
-        if (patientRepository.findByPersonId(patient.personId) == null) {
+        if (patientRepository.findById(patient.personId) == null) {
             throw PatientNotFoundException(patient.personId)
         }
         patientRepository.save(patient)
     }
 
     override fun getPatient(id: UUID): Patient =
-            patientRepository.findByPersonId(id) ?: throw PatientNotFoundException(id)
+            patientRepository.findById(id) ?: throw PatientNotFoundException(id)
 
 }
