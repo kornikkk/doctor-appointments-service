@@ -1,7 +1,5 @@
 package pl.kornikkk.doctorappointments.application.controller
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -10,6 +8,8 @@ import pl.kornikkk.doctorappointments.application.controller.request.ModifyPatie
 import pl.kornikkk.doctorappointments.application.controller.request.NewPatientRequest
 import pl.kornikkk.doctorappointments.application.controller.request.UpdatePatientRequest
 import pl.kornikkk.doctorappointments.application.controller.response.PatientResponse
+import pl.kornikkk.doctorappointments.application.util.Logging
+import pl.kornikkk.doctorappointments.application.util.logger
 import pl.kornikkk.doctorappointments.domain.Patient
 import pl.kornikkk.doctorappointments.domain.exception.PatientNotFoundException
 import pl.kornikkk.doctorappointments.domain.service.PatientService
@@ -17,13 +17,13 @@ import java.util.*
 
 @RestController
 @RequestMapping("/patients")
-class PatientRestController(private val patientService: PatientService) {
+class PatientRestController(private val patientService: PatientService) : Logging {
 
-    private val log: Logger = LoggerFactory.getLogger(javaClass)
+    private val log = logger()
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun newPatient(@RequestBody request: NewPatientRequest): ResponseEntity<Any> {
+    fun add(@RequestBody request: NewPatientRequest): ResponseEntity<Any> {
         val patient = patientService.createPatient(request.firstName, request.lastName, request.address)
 
         val location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -34,7 +34,7 @@ class PatientRestController(private val patientService: PatientService) {
     }
 
     @GetMapping("/{patientId}")
-    fun getPatient(@PathVariable patientId: String): PatientResponse =
+    fun findById(@PathVariable patientId: String): PatientResponse =
             patientService.getPatient(UUID.fromString(patientId)).let {
                 PatientResponse(
                         it.personId.toString(),
@@ -44,7 +44,7 @@ class PatientRestController(private val patientService: PatientService) {
             }
 
     @PutMapping("/{patientId}")
-    fun updatePatient(@PathVariable patientId: String, @RequestBody request: UpdatePatientRequest): ResponseEntity<String> {
+    fun update(@PathVariable patientId: String, @RequestBody request: UpdatePatientRequest): ResponseEntity<String> {
         patientService.updatePatient(Patient(
                 UUID.fromString(patientId),
                 request.firstName,
@@ -56,7 +56,7 @@ class PatientRestController(private val patientService: PatientService) {
     }
 
     @PatchMapping("/{patientId}")
-    fun modifyPatient(@PathVariable patientId: String, @RequestBody request: ModifyPatientRequest): ResponseEntity<String> {
+    fun modify(@PathVariable patientId: String, @RequestBody request: ModifyPatientRequest): ResponseEntity<String> {
         val patient = patientService.getPatient(UUID.fromString(patientId))
         request.firstName?.let { patient.firstName = it }
         request.lastName?.let { patient.lastName = it }
