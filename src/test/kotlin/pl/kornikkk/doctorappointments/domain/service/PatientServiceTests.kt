@@ -40,6 +40,7 @@ class PatientServiceTests : BehaviorSpec({
 
         every { patientRepository.findById(existingPatientId) } returns patient
         every { patientRepository.findById(notExistingPatientId) } returns null
+        every { patientRepository.deleteById(any()) } returns mockk()
 
         When("getting existing patient") {
             val foundPatient = patientService.getPatient(existingPatientId)
@@ -55,6 +56,14 @@ class PatientServiceTests : BehaviorSpec({
             }
             Then("exception with patient id is thrown") {
                 exception.message shouldContain notExistingPatientId.toString()
+            }
+        }
+
+        When("deleting existing patient") {
+            patientService.deletePatient(existingPatientId)
+
+            Then("patient is deleted") {
+                verify(exactly = 1) { patientRepository.deleteById(existingPatientId) }
             }
         }
     }
