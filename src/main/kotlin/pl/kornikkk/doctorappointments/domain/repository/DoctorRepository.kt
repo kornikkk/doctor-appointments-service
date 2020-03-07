@@ -6,4 +6,5 @@ import java.util.*
 interface DoctorRepository {
     fun findById(id: UUID): Doctor?
     fun save(doctor: Doctor): Doctor
+    fun deleteById(id: UUID)
 }
