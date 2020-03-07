@@ -85,7 +85,7 @@ class PatientRestControllerTests : StringSpec() {
             val personId = UUID.randomUUID()
             val patient = mockk<Patient>(relaxed = true)
 
-            every { patient.personId } returns personId
+            every { patient.id } returns personId
             every { service.getPatient(personId) } returns patient
 
             mockMvc.perform(

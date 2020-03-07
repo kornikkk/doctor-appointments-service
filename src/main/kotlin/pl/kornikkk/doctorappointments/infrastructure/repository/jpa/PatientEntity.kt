@@ -1,16 +1,14 @@
 package pl.kornikkk.doctorappointments.infrastructure.repository.jpa
 
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "patients")
 data class PatientEntity(
         @Id
-        var id: UUID = UUID.randomUUID(),
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        var id: UUID?,
 
         @Column(nullable = false)
         var firstName: String,

@@ -28,36 +28,35 @@ class PatientRestController(private val patientService: PatientService) : Loggin
 
         val location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{patientId}")
-                .buildAndExpand(patient.personId)
+                .buildAndExpand(patient.id)
                 .toUri()
         return ResponseEntity.created(location).build()
     }
 
     @GetMapping("/{patientId}")
-    fun findById(@PathVariable patientId: String): PatientResponse =
-            patientService.getPatient(UUID.fromString(patientId)).let {
+    fun findById(@PathVariable patientId: UUID): PatientResponse =
+            patientService.getPatient(patientId).let {
                 PatientResponse(
-                        it.personId.toString(),
+                        it.id!!,
                         it.firstName,
                         it.lastName,
                         it.address)
             }
 
     @PutMapping("/{patientId}")
-    fun update(@PathVariable patientId: String, @RequestBody request: UpdatePatientRequest): ResponseEntity<String> {
+    fun update(@PathVariable patientId: UUID, @RequestBody request: UpdatePatientRequest): ResponseEntity<String> {
         patientService.updatePatient(Patient(
-                UUID.fromString(patientId),
+                patientId,
                 request.firstName,
                 request.lastName,
                 request.address
         ))
-
         return ResponseEntity.ok("Patient updated")
     }
 
     @PatchMapping("/{patientId}")
-    fun modify(@PathVariable patientId: String, @RequestBody request: ModifyPatientRequest): ResponseEntity<String> {
-        val patient = patientService.getPatient(UUID.fromString(patientId))
+    fun modify(@PathVariable patientId: UUID, @RequestBody request: ModifyPatientRequest): ResponseEntity<String> {
+        val patient = patientService.getPatient(patientId)
         request.firstName?.let { patient.firstName = it }
         request.lastName?.let { patient.lastName = it }
         request.address?.let { patient.address = it }

@@ -10,7 +10,7 @@ fun PatientEntity.toDomain() = Patient(
 )
 
 fun Patient.toEntity() = PatientEntity(
-        personId,
+        id,
         firstName,
         lastName,
         address
