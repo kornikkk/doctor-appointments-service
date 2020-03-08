@@ -7,16 +7,16 @@ import java.util.*
 
 class DoctorServiceImpl(private val doctorRepository: DoctorRepository) : DoctorService {
 
-    override fun createDoctor(firstName: String, lastName: String) =
+    override fun create(firstName: String, lastName: String) =
             doctorRepository.save(Doctor(firstName, lastName))
 
-    override fun updateDoctor(doctor: Doctor): Doctor =
+    override fun update(doctor: Doctor): Doctor =
             doctorRepository.save(doctor)
 
-    override fun getDoctor(id: UUID) =
+    override fun get(id: UUID) =
             doctorRepository.findById(id) ?: throw DoctorNotFoundException(id)
 
-    override fun deleteDoctor(id: UUID) {
+    override fun delete(id: UUID) {
         doctorRepository.deleteById(id)
     }
 }

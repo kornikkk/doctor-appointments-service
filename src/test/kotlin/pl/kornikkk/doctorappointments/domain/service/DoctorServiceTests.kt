@@ -24,7 +24,7 @@ class DoctorServiceTests : BehaviorSpec({
         every { doctorRepository.save(any()) } returns mockk()
 
         When("creating doctor") {
-            doctorService.createDoctor(firstName, lastName)
+            doctorService.create(firstName, lastName)
 
             Then("doctor is created") {
                 verify { doctorRepository.save(any()) }
@@ -42,7 +42,7 @@ class DoctorServiceTests : BehaviorSpec({
         every { doctorRepository.deleteById(any()) } returns mockk()
 
         When("getting existing doctor") {
-            val foundPatient = doctorService.getDoctor(existingDoctorId)
+            val foundPatient = doctorService.get(existingDoctorId)
 
             Then("doctor is found") {
                 foundPatient shouldBe doctor
@@ -51,7 +51,7 @@ class DoctorServiceTests : BehaviorSpec({
 
         When("getting not existing doctor") {
             val exception = shouldThrow<DoctorNotFoundException> {
-                doctorService.getDoctor(notExistingDoctorId)
+                doctorService.get(notExistingDoctorId)
             }
             Then("exception with doctor id is thrown") {
                 exception.message shouldContain notExistingDoctorId.toString()
@@ -59,7 +59,7 @@ class DoctorServiceTests : BehaviorSpec({
         }
 
         When("deleting existing doctor") {
-            doctorService.deleteDoctor(existingDoctorId)
+            doctorService.delete(existingDoctorId)
 
             Then("doctor is deleted") {
                 verify { doctorRepository.deleteById(existingDoctorId) }

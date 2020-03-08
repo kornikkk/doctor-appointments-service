@@ -4,8 +4,8 @@ import pl.kornikkk.doctorappointments.domain.Doctor
 import java.util.*
 
 interface DoctorService {
-    fun createDoctor(firstName: String, lastName: String): Doctor
-    fun updateDoctor(doctor: Doctor): Doctor
-    fun getDoctor(id: UUID): Doctor
-    fun deleteDoctor(id: UUID)
+    fun create(firstName: String, lastName: String): Doctor
+    fun update(doctor: Doctor): Doctor
+    fun get(id: UUID): Doctor
+    fun delete(id: UUID)
 }
