@@ -23,7 +23,7 @@ class PatientRestController(private val patientService: PatientService) : Loggin
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun add(@RequestBody request: NewPatientRequest): ResponseEntity<Any> {
-        val patient = patientService.createPatient(request.firstName, request.lastName, request.address)
+        val patient = patientService.create(request.firstName, request.lastName, request.address)
 
         val location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -35,7 +35,7 @@ class PatientRestController(private val patientService: PatientService) : Loggin
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun findById(@PathVariable id: UUID): PatientResponse =
-            patientService.getPatient(id).let {
+            patientService.get(id).let {
                 PatientResponse(
                         it.id!!,
                         it.firstName,
@@ -46,7 +46,7 @@ class PatientRestController(private val patientService: PatientService) : Loggin
     @PutMapping("/{id}", consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: UUID, @RequestBody request: UpdatePatientRequest) {
-        patientService.updatePatient(Patient(
+        patientService.update(Patient(
                 id,
                 request.firstName,
                 request.lastName,
@@ -57,7 +57,7 @@ class PatientRestController(private val patientService: PatientService) : Loggin
     @DeleteMapping("/{patientId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable patientId: UUID) {
-        patientService.deletePatient(patientId)
+        patientService.delete(patientId)
     }
 
     @ExceptionHandler(PatientNotFoundException::class)
