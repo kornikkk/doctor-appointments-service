@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import pl.kornikkk.doctorappointments.application.controller.request.NewDoctorRequest
 import pl.kornikkk.doctorappointments.application.controller.request.UpdateDoctorRequest
-import pl.kornikkk.doctorappointments.application.controller.response.DoctorResponse
+import pl.kornikkk.doctorappointments.application.controller.response.DoctorResource
 import pl.kornikkk.doctorappointments.application.util.Logging
 import pl.kornikkk.doctorappointments.application.util.logger
 import pl.kornikkk.doctorappointments.domain.Doctor
@@ -34,9 +34,9 @@ class DoctorRestController(private val doctorService: DoctorService) : Logging {
 
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
-    fun findById(@PathVariable id: UUID): DoctorResponse =
+    fun findById(@PathVariable id: UUID): DoctorResource =
             doctorService.get(id).let {
-                DoctorResponse(
+                DoctorResource(
                         it.id!!,
                         it.firstName,
                         it.lastName)
