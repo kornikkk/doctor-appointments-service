@@ -36,7 +36,7 @@ class PatientRestControllerTests : AnnotationSpec() {
 
     @Test
     fun `patients POST should create patient`() {
-        val personId = UUID.randomUUID()
+        val id = UUID.randomUUID()
         val firstName = "Test"
         val lastName = "User"
         val address = "Street 2/3 City"
@@ -51,19 +51,19 @@ class PatientRestControllerTests : AnnotationSpec() {
 
         every {
             service.create(firstName, lastName, address)
-        } returns Patient(personId, firstName, lastName, address)
+        } returns Patient(id, firstName, lastName, address)
 
         mockMvc.perform(
                 post("/patients")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated)
-                .andExpect(header().string(HttpHeaders.LOCATION, StringEndsWith(true, personId.toString())))
+                .andExpect(header().string(HttpHeaders.LOCATION, StringEndsWith(true, id.toString())))
     }
 
     @Test
     fun `patients PUT should update patient`() {
-        val personId = UUID.randomUUID()
+        val id = UUID.randomUUID()
 
         val requestBody = """
                 |{
@@ -76,7 +76,7 @@ class PatientRestControllerTests : AnnotationSpec() {
         every { service.update(any()) } returns mockk()
 
         mockMvc.perform(
-                put("/patients/$personId")
+                put("/patients/$id")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().is2xxSuccessful)
@@ -84,27 +84,27 @@ class PatientRestControllerTests : AnnotationSpec() {
 
     @Test
     fun `patients GET should get patient`() {
-        val personId = UUID.randomUUID()
+        val id = UUID.randomUUID()
         val patient = mockk<Patient>(relaxed = true)
 
-        every { patient.id } returns personId
-        every { service.get(personId) } returns patient
+        every { patient.id } returns id
+        every { service.get(id) } returns patient
 
         mockMvc.perform(
-                get("/patients/$personId"))
+                get("/patients/$id"))
                 .andExpect(status().isOk)
-                .andExpect(content().string(StringContains(true, personId.toString())))
+                .andExpect(content().string(StringContains(true, id.toString())))
 
     }
 
     @Test
     fun `patients GET should return NotFound when patient not existing`() {
-        val personId = UUID.randomUUID()
+        val id = UUID.randomUUID()
 
-        every { service.get(any()) } throws PatientNotFoundException(personId)
+        every { service.get(any()) } throws PatientNotFoundException(id)
 
         mockMvc.perform(
-                get("/patients/$personId"))
+                get("/patients/$id"))
                 .andExpect(status().isNotFound)
     }
 
