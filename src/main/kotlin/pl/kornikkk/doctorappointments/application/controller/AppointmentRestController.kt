@@ -9,6 +9,7 @@ import pl.kornikkk.doctorappointments.application.controller.response.Appointmen
 import pl.kornikkk.doctorappointments.application.controller.utils.createdWithLocationResponse
 import pl.kornikkk.doctorappointments.application.util.Logging
 import pl.kornikkk.doctorappointments.application.util.logger
+import pl.kornikkk.doctorappointments.domain.exception.DoctorNotFoundException
 import pl.kornikkk.doctorappointments.domain.service.AppointmentService
 import java.time.LocalDateTime
 import java.util.*
@@ -32,5 +33,17 @@ class AppointmentRestController(private val appointmentService: AppointmentServi
     @ResponseStatus(HttpStatus.OK)
     fun findById(@PathVariable id: UUID): AppointmentResource =
             appointmentService.getAppointment(id).toResource()
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(@PathVariable id: UUID) {
+        appointmentService.delete(id)
+    }
+
+    @ExceptionHandler(DoctorNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleNotFound(notFoundException: DoctorNotFoundException) {
+        log.debug(notFoundException.message)
+    }
 
 }
