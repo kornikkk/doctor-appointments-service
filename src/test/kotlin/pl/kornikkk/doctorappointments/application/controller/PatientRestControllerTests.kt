@@ -38,7 +38,7 @@ class PatientRestControllerTests : AnnotationSpec() {
     fun `patients POST should create patient`() {
         val id = UUID.randomUUID()
         val firstName = "Test"
-        val lastName = "User"
+        val lastName = "Patient"
         val address = "Street 2/3 City"
 
         val requestBody = """
