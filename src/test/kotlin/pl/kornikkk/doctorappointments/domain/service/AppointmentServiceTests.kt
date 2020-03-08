@@ -9,7 +9,6 @@ import pl.kornikkk.doctorappointments.domain.Appointment
 import pl.kornikkk.doctorappointments.domain.exception.ConflictingAppointmentException
 import pl.kornikkk.doctorappointments.domain.repository.AppointmentRepository
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.util.*
 
 
@@ -24,8 +23,8 @@ class AppointmentServiceTests : BehaviorSpec({
         val patientId = UUID.randomUUID()
         val doctorId = UUID.randomUUID()
         val location = "Test Location"
-        val dateTime = LocalDateTime.now()
-        val conflictingDateTime = LocalDateTime.now().plusHours(2)
+        val dateTime = LocalDateTime.of(2020, 3, 8, 7, 30)
+        val conflictingDateTime = LocalDateTime.of(2020, 3, 8, 9, 30)
 
         every { appointmentRepository.save(any()) } returns mockk()
         every { appointmentRepository.existsAtDateTime(patientId, doctorId, dateTime) } returns false
@@ -51,52 +50,38 @@ class AppointmentServiceTests : BehaviorSpec({
         val patientId = UUID.randomUUID()
         val doctorId = UUID.randomUUID()
         val location = "Test Location"
-        val dateTime = LocalDateTime.now()
+        val dateTime = LocalDateTime.of(2020, 3, 8, 7, 30)
         val appointment = Appointment(appointmentId, patientId, doctorId, location, dateTime)
 
-        val newTime = LocalTime.now().plusHours(2)
-        val newDateTime = dateTime.with(newTime)
+        val newDateTime = LocalDateTime.of(2020, 3, 8, 9, 30)
+        val newConflictingDateTime = LocalDateTime.of(2020, 3, 8, 14, 30)
 
         every { appointmentRepository.findById(appointmentId) } returns appointment
         every { appointmentRepository.existsAtDateTime(patientId, doctorId, newDateTime) } returns false
+        every { appointmentRepository.existsAtDateTime(patientId, doctorId, newConflictingDateTime) } returns true
 
         When("rescheduling appointment") {
-            appointmentService.rescheduleAppointment(appointmentId, newTime)
+            appointmentService.rescheduleAppointment(appointmentId, newDateTime.toLocalTime())
 
             Then("appointment is rescheduled") {
                 verify { appointmentRepository.save(any()) }
             }
         }
-    }
 
-
-    Given("appointment and new time conflicting with another appointment") {
-        val appointmentId = UUID.randomUUID()
-        val patientId = UUID.randomUUID()
-        val doctorId = UUID.randomUUID()
-        val location = "Test Location"
-        val dateTime = LocalDateTime.now()
-        val appointment = Appointment(appointmentId, patientId, doctorId, location, dateTime)
-
-        val newTime = LocalTime.now().plusHours(2)
-        val newDateTime = dateTime.with(newTime)
-
-        every { appointmentRepository.findById(appointmentId) } returns appointment
-        every { appointmentRepository.existsAtDateTime(patientId, doctorId, newDateTime) } returns true
-
-        When("rescheduling appointment") {
+        When("rescheduling appointment to conflicting time") {
             shouldThrow<ConflictingAppointmentException> {
-                appointmentService.rescheduleAppointment(appointmentId, newTime)
+                appointmentService.rescheduleAppointment(appointmentId, newConflictingDateTime.toLocalTime())
             }
             Then("conflicting appointment exception is thrown") { }
         }
 
-        When("rescheduling conflicting appointment with conflicts allowed") {
-            appointmentService.rescheduleAppointment(appointmentId, newTime, true)
+        When("rescheduling appointment to conflicting time with conflicts allowed") {
+            appointmentService.rescheduleAppointment(appointmentId, newConflictingDateTime.toLocalTime(), true)
 
             Then("conflicting appointment is rescheduled") {
                 verify { appointmentRepository.save(any()) }
             }
         }
     }
+
 })
