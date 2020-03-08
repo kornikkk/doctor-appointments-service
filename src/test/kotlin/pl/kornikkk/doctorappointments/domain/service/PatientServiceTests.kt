@@ -22,7 +22,7 @@ class PatientServiceTests : BehaviorSpec({
         val lastName = "Patient"
         val address = "Street 2/3 City"
 
-        every { patientRepository.save(any()) } returns mockk()
+        every { patientRepository.save(any()) } returns mockk(relaxed = true)
 
         When("creating patient") {
             patientService.create(firstName, lastName, address)

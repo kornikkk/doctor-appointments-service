@@ -44,6 +44,12 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:2.0.0")
 }
 
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }

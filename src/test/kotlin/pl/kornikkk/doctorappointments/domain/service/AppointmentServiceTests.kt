@@ -26,7 +26,7 @@ class AppointmentServiceTests : BehaviorSpec({
         val dateTime = LocalDateTime.of(2020, 3, 8, 7, 30)
         val conflictingDateTime = LocalDateTime.of(2020, 3, 8, 9, 30)
 
-        every { appointmentRepository.save(any()) } returns mockk()
+        every { appointmentRepository.save(any()) } returns mockk(relaxed = true)
         every { appointmentRepository.existsAtDateTime(patientId, doctorId, dateTime) } returns false
         every { appointmentRepository.existsAtDateTime(patientId, doctorId, conflictingDateTime) } returns true
 

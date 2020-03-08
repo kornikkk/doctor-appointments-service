@@ -47,9 +47,7 @@ class DoctorRestControllerTests : AnnotationSpec() {
                 |}
                 |""".trimMargin()
 
-        every {
-            service.create(firstName, lastName)
-        } returns Doctor(id, firstName, lastName)
+        every { service.create(firstName, lastName) } returns id
 
         mockMvc.perform(
                 post("/doctors")
@@ -71,6 +69,7 @@ class DoctorRestControllerTests : AnnotationSpec() {
                 |""".trimMargin()
 
         every { service.update(any()) } returns mockk()
+        every { service.get(id) } returns mockk(relaxed = true)
 
         mockMvc.perform(
                 put("/doctors/$id")
