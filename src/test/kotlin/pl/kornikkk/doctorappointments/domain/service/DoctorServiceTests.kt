@@ -61,7 +61,7 @@ class DoctorServiceTests : BehaviorSpec({
         When("deleting existing doctor") {
             doctorService.deleteDoctor(existingDoctorId)
 
-            Then("patient is deleted") {
+            Then("doctor is deleted") {
                 verify { doctorRepository.deleteById(existingDoctorId) }
             }
         }
