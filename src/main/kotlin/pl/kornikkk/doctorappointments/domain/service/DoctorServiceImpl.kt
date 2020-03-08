@@ -8,10 +8,11 @@ import java.util.*
 class DoctorServiceImpl(private val doctorRepository: DoctorRepository) : DoctorService {
 
     override fun create(firstName: String, lastName: String) =
-            doctorRepository.save(Doctor(firstName, lastName))
+            doctorRepository.save(Doctor(firstName, lastName)).id!!
 
-    override fun update(doctor: Doctor): Doctor =
-            doctorRepository.save(doctor)
+    override fun update(doctor: Doctor) {
+        doctorRepository.save(doctor)
+    }
 
     override fun get(id: UUID) =
             doctorRepository.findById(id) ?: throw DoctorNotFoundException(id)

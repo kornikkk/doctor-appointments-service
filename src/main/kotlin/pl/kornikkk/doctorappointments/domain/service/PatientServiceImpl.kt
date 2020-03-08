@@ -7,8 +7,8 @@ import java.util.*
 
 class PatientServiceImpl(private val patientRepository: PatientRepository) : PatientService {
 
-    override fun create(firstName: String, lastName: String, address: String): Patient =
-            patientRepository.save(Patient(firstName, lastName, address))
+    override fun create(firstName: String, lastName: String, address: String) =
+            patientRepository.save(Patient(firstName, lastName, address)).id!!
 
     override fun update(patient: Patient) {
         patientRepository.save(patient)

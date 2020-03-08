@@ -6,5 +6,6 @@ data class PatientResource(
         var id: UUID,
         var firstName: String,
         var lastName: String,
-        var address: String
+        var address: String,
+        var appointments: List<UUID>
 )

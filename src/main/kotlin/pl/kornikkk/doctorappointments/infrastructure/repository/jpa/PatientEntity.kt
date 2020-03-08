@@ -4,19 +4,16 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "patients")
-data class PatientEntity(
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        var id: UUID?,
+@Table(name = "patient")
+class PatientEntity(
+        id: UUID?,
+        firstName: String,
+        lastName: String,
 
         @Column(nullable = false)
-        var firstName: String,
+        var address: String,
 
-        @Column(nullable = false)
-        var lastName: String,
+        @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY, mappedBy = "patient")
+        var appointments: MutableList<AppointmentEntity> = mutableListOf()
 
-        @Column(nullable = false)
-        var address: String
-
-)
+) : PersonEntity(id, firstName, lastName)

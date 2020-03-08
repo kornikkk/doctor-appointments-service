@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext
 
 
 class CrudAppointmentRepository(private val crudRepository: SpringDataCrudAppointmentRepository) : AppointmentRepository {
+
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 

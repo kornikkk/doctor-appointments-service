@@ -5,23 +5,24 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "appointments")
-data class AppointmentEntity(
+@Table(name = "appointment")
+class AppointmentEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: UUID?,
+        @Access(AccessType.PROPERTY)
+        var id: UUID?,
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "patient_id")
-        val patient: PatientEntity,
+        var patient: PatientEntity,
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "doctor_id")
-        val doctor: DoctorEntity,
+        var doctor: DoctorEntity,
 
         @Column(nullable = false)
-        val location: String,
+        var location: String,
 
         @Column(nullable = false, columnDefinition = "TIMESTAMP")
-        val dateTime: LocalDateTime
+        var dateTime: LocalDateTime
 )

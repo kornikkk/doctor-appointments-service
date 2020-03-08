@@ -12,11 +12,11 @@ class AppointmentServiceImpl(private val appointmentRepository: AppointmentRepos
                              private val patientService: PatientService,
                              private val doctorService: DoctorService) : AppointmentService {
 
-    override fun scheduleAppointment(patientId: UUID, doctorId: UUID, location: String, dateTime: LocalDateTime): Appointment {
+    override fun scheduleAppointment(patientId: UUID, doctorId: UUID, location: String, dateTime: LocalDateTime): UUID {
         if (isConflictingAnotherAppointment(patientId, doctorId, dateTime)) {
             throw ConflictingAppointmentException(patientId, doctorId, dateTime)
         }
-        return appointmentRepository.save(Appointment(patientId, doctorId, location, dateTime))
+        return appointmentRepository.save(Appointment(patientId, doctorId, location, dateTime)).id!!
     }
 
     override fun getAppointment(id: UUID): Appointment =
