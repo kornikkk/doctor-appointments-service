@@ -54,16 +54,16 @@ class PatientRestController(private val patientService: PatientService) : Loggin
         ))
     }
 
-    @DeleteMapping("/{patientId}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable patientId: UUID) {
-        patientService.delete(patientId)
+    fun delete(@PathVariable id: UUID) {
+        patientService.delete(id)
     }
 
     @ExceptionHandler(PatientNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handlePatientNotFound(patientNotFoundException: PatientNotFoundException) {
-        log.debug(patientNotFoundException.message)
+    fun handleNotFound(notFoundException: PatientNotFoundException) {
+        log.debug(notFoundException.message)
     }
 
 }
