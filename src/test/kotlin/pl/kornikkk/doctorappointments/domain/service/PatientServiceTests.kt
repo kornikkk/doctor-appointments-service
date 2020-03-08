@@ -19,7 +19,7 @@ class PatientServiceTests : BehaviorSpec({
 
     Given("new patient data") {
         val firstName = "Test"
-        val lastName = "User"
+        val lastName = "Patient"
         val address = "Street 2/3 City"
 
         every { patientRepository.save(any()) } returns mockk()
