@@ -42,10 +42,10 @@ class DoctorServiceTests : BehaviorSpec({
         every { doctorRepository.deleteById(any()) } returns mockk()
 
         When("getting existing doctor") {
-            val foundPatient = doctorService.get(existingDoctorId)
+            val foundDoctor = doctorService.get(existingDoctorId)
 
             Then("doctor is found") {
-                foundPatient shouldBe doctor
+                foundDoctor shouldBe doctor
             }
         }
 
