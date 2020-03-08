@@ -8,4 +8,5 @@ interface AppointmentRepository {
     fun findById(id: UUID): Appointment?
     fun save(appointment: Appointment): Appointment
     fun existsAtDateTime(patientId: UUID, doctorId: UUID, dateTime: LocalDateTime): Boolean
+    fun deleteById(id: UUID)
 }

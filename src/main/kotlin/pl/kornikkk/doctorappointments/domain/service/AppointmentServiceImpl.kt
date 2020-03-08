@@ -32,6 +32,10 @@ class AppointmentServiceImpl(private val appointmentRepository: AppointmentRepos
         appointmentRepository.save(appointment)
     }
 
+    override fun delete(id: UUID) {
+        appointmentRepository.deleteById(id)
+    }
+
     private fun isConflictingAnotherAppointment(patientId: UUID, doctorId: UUID, dateTime: LocalDateTime): Boolean =
             appointmentRepository.existsAtDateTime(patientId, doctorId, dateTime)
 

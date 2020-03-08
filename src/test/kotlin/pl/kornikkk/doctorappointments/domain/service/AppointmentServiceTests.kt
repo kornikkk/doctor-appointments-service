@@ -1,11 +1,14 @@
 package pl.kornikkk.doctorappointments.domain.service
 
+import io.kotlintest.matchers.string.shouldContain
+import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.BehaviorSpec
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import pl.kornikkk.doctorappointments.domain.Appointment
+import pl.kornikkk.doctorappointments.domain.exception.AppointmentNotFoundException
 import pl.kornikkk.doctorappointments.domain.exception.ConflictingAppointmentException
 import pl.kornikkk.doctorappointments.domain.repository.AppointmentRepository
 import java.time.LocalDateTime
@@ -84,4 +87,38 @@ class AppointmentServiceTests : BehaviorSpec({
         }
     }
 
+    Given("appointment ids") {
+        val existingAppointmentId = UUID.randomUUID()
+        val notExistingAppointmentId = UUID.randomUUID()
+        val appointment = mockk<Appointment>()
+
+        every { appointmentRepository.findById(existingAppointmentId) } returns appointment
+        every { appointmentRepository.findById(notExistingAppointmentId) } returns null
+        every { appointmentRepository.deleteById(any()) } returns mockk()
+
+        When("getting existing appointment") {
+            val foundAppointment = appointmentService.getAppointment(existingAppointmentId)
+
+            Then("appointment is found") {
+                foundAppointment shouldBe appointment
+            }
+        }
+
+        When("getting not existing appointment") {
+            val exception = shouldThrow<AppointmentNotFoundException> {
+                appointmentService.getAppointment(notExistingAppointmentId)
+            }
+            Then("exception with appointment id is thrown") {
+                exception.message shouldContain notExistingAppointmentId.toString()
+            }
+        }
+
+        When("deleting existing appointment") {
+            appointmentService.delete(existingAppointmentId)
+
+            Then("appointment is deleted") {
+                verify { appointmentRepository.deleteById(existingAppointmentId) }
+            }
+        }
+    }
 })
