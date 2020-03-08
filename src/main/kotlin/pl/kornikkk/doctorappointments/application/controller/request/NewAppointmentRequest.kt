@@ -10,7 +10,7 @@ data class NewAppointmentRequest(
         val doctorId: UUID,
         val location: String,
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         val date: LocalDate,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
