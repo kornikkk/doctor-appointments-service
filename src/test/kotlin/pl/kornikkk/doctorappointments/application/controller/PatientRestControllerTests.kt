@@ -50,7 +50,7 @@ class PatientRestControllerTests : AnnotationSpec() {
                 |""".trimMargin()
 
         every {
-            service.createPatient(firstName, lastName, address)
+            service.create(firstName, lastName, address)
         } returns Patient(personId, firstName, lastName, address)
 
         mockMvc.perform(
@@ -73,7 +73,7 @@ class PatientRestControllerTests : AnnotationSpec() {
                 |}
                 |""".trimMargin()
 
-        every { service.updatePatient(any()) } returns mockk()
+        every { service.update(any()) } returns mockk()
 
         mockMvc.perform(
                 put("/patients/$personId")
@@ -88,7 +88,7 @@ class PatientRestControllerTests : AnnotationSpec() {
         val patient = mockk<Patient>(relaxed = true)
 
         every { patient.id } returns personId
-        every { service.getPatient(personId) } returns patient
+        every { service.get(personId) } returns patient
 
         mockMvc.perform(
                 get("/patients/$personId"))
@@ -101,7 +101,7 @@ class PatientRestControllerTests : AnnotationSpec() {
     fun `patients GET should return NotFound when patient not existing`() {
         val personId = UUID.randomUUID()
 
-        every { service.getPatient(any()) } throws PatientNotFoundException(personId)
+        every { service.get(any()) } throws PatientNotFoundException(personId)
 
         mockMvc.perform(
                 get("/patients/$personId"))
@@ -112,7 +112,7 @@ class PatientRestControllerTests : AnnotationSpec() {
     fun `patients DELETE should delete patient`() {
         val id = UUID.randomUUID()
 
-        every { service.deletePatient(id) } returns mockk()
+        every { service.delete(id) } returns mockk()
 
         mockMvc.perform(delete("/patients/$id"))
                 .andExpect(status().is2xxSuccessful)

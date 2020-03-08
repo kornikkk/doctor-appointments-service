@@ -25,7 +25,7 @@ class PatientServiceTests : BehaviorSpec({
         every { patientRepository.save(any()) } returns mockk()
 
         When("creating patient") {
-            patientService.createPatient(firstName, lastName, address)
+            patientService.create(firstName, lastName, address)
 
             Then("patient is created") {
                 verify { patientRepository.save(any()) }
@@ -43,7 +43,7 @@ class PatientServiceTests : BehaviorSpec({
         every { patientRepository.deleteById(any()) } returns mockk()
 
         When("getting existing patient") {
-            val foundPatient = patientService.getPatient(existingPatientId)
+            val foundPatient = patientService.get(existingPatientId)
 
             Then("patient is found") {
                 foundPatient shouldBe patient
@@ -52,7 +52,7 @@ class PatientServiceTests : BehaviorSpec({
 
         When("getting not existing patient") {
             val exception = shouldThrow<PatientNotFoundException> {
-                patientService.getPatient(notExistingPatientId)
+                patientService.get(notExistingPatientId)
             }
             Then("exception with patient id is thrown") {
                 exception.message shouldContain notExistingPatientId.toString()
@@ -60,7 +60,7 @@ class PatientServiceTests : BehaviorSpec({
         }
 
         When("deleting existing patient") {
-            patientService.deletePatient(existingPatientId)
+            patientService.delete(existingPatientId)
 
             Then("patient is deleted") {
                 verify { patientRepository.deleteById(existingPatientId) }
