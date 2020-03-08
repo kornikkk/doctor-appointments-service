@@ -63,7 +63,7 @@ class PatientServiceTests : BehaviorSpec({
             patientService.deletePatient(existingPatientId)
 
             Then("patient is deleted") {
-                verify(exactly = 1) { patientRepository.deleteById(existingPatientId) }
+                verify { patientRepository.deleteById(existingPatientId) }
             }
         }
     }
