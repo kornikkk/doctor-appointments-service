@@ -16,4 +16,7 @@ class DoctorServiceImpl(private val doctorRepository: DoctorRepository) : Doctor
     override fun getDoctor(id: UUID) =
             doctorRepository.findById(id) ?: throw DoctorNotFoundException(id)
 
+    override fun deleteDoctor(id: UUID) {
+        doctorRepository.deleteById(id)
+    }
 }

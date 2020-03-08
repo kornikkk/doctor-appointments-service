@@ -7,4 +7,5 @@ interface DoctorService {
     fun createDoctor(firstName: String, lastName: String): Doctor
     fun updateDoctor(doctor: Doctor): Doctor
     fun getDoctor(id: UUID): Doctor
+    fun deleteDoctor(id: UUID)
 }
