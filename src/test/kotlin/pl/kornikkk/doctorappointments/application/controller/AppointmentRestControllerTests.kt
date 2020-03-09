@@ -5,6 +5,7 @@ import io.kotlintest.specs.AnnotationSpec
 import io.kotlintest.spring.SpringListener
 import io.mockk.every
 import io.mockk.mockk
+import org.hamcrest.Matchers.`is`
 import org.hamcrest.core.StringEndsWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -13,10 +14,9 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import pl.kornikkk.doctorappointments.domain.Appointment
 import pl.kornikkk.doctorappointments.domain.service.AppointmentService
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -36,6 +36,40 @@ class AppointmentRestControllerTests : AnnotationSpec() {
 
     @MockkBean
     lateinit var service: AppointmentService
+
+    @Test
+    fun `appointments GET should find all appointments`() {
+        val appointments: List<Appointment> = listOf(mockk(relaxed = true), mockk(relaxed = true))
+
+        every { service.findAll() } returns appointments
+
+        mockMvc.perform(
+                get("/appointments"))
+                .andExpect(status().isOk)
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.length()", `is`(2)))
+    }
+
+    @Test
+    fun `appointments GET with patientId request parametere should find filtered appointments`() {
+        val patientId = UUID.randomUUID()
+        val patientAppointment: Appointment = mockk(relaxed = true)
+
+        val allAppointments = listOf(patientAppointment, mockk(relaxed = true))
+        val patientAppointments = allAppointments.filter { it.patientId == patientId }
+
+        every { patientAppointment.patientId } returns patientId
+
+        every { service.findAll() } returns allAppointments
+        every { service.findAllByPatientId(patientId) } returns patientAppointments
+
+        mockMvc.perform(
+                get("/appointments")
+                        .requestAttr("patientId", patientId))
+                .andExpect(status().isOk)
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.length()", `is`(2)))
+    }
 
     @Test
     fun `appointments POST should schedule appointment`() {
