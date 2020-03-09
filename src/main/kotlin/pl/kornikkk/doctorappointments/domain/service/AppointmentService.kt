@@ -6,10 +6,10 @@ import java.time.LocalTime
 import java.util.*
 
 interface AppointmentService {
-    fun scheduleAppointment(patientId: UUID, doctorId: UUID, location: String, dateTime: LocalDateTime): UUID
-    fun getAppointment(id: UUID): Appointment
+    fun schedule(patientId: UUID, doctorId: UUID, location: String, dateTime: LocalDateTime): UUID
+    fun get(id: UUID): Appointment
     fun findAll(): List<Appointment>
     fun findAllByPatientId(patientId: UUID): List<Appointment>
-    fun rescheduleAppointment(id: UUID, newTime: LocalTime, allowConflicts: Boolean = false)
+    fun reschedule(id: UUID, newTime: LocalTime, allowConflicts: Boolean = false)
     fun delete(id: UUID)
 }

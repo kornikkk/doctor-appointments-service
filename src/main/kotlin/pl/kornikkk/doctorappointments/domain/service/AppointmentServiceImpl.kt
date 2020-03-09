@@ -12,14 +12,14 @@ class AppointmentServiceImpl(private val appointmentRepository: AppointmentRepos
                              private val patientService: PatientService,
                              private val doctorService: DoctorService) : AppointmentService {
 
-    override fun scheduleAppointment(patientId: UUID, doctorId: UUID, location: String, dateTime: LocalDateTime): UUID {
+    override fun schedule(patientId: UUID, doctorId: UUID, location: String, dateTime: LocalDateTime): UUID {
         if (isConflictingAnotherAppointment(patientId, doctorId, dateTime)) {
             throw ConflictingAppointmentException(patientId, doctorId, dateTime)
         }
         return appointmentRepository.save(Appointment(patientId, doctorId, location, dateTime)).id!!
     }
 
-    override fun getAppointment(id: UUID): Appointment =
+    override fun get(id: UUID): Appointment =
             appointmentRepository.findById(id) ?: throw AppointmentNotFoundException(id)
 
     override fun findAll(): List<Appointment> =
@@ -28,8 +28,8 @@ class AppointmentServiceImpl(private val appointmentRepository: AppointmentRepos
     override fun findAllByPatientId(patientId: UUID): List<Appointment> =
             appointmentRepository.findAllByPatientId(patientId)
 
-    override fun rescheduleAppointment(id: UUID, newTime: LocalTime, allowConflicts: Boolean) {
-        val appointment = getAppointment(id)
+    override fun reschedule(id: UUID, newTime: LocalTime, allowConflicts: Boolean) {
+        val appointment = get(id)
         val newDateTime = appointment.dateTime.with(newTime)
         if (!allowConflicts && isConflictingAnotherAppointment(appointment.patientId, appointment.doctorId, newDateTime)) {
             throw ConflictingAppointmentException(appointment.patientId, appointment.doctorId, newDateTime)

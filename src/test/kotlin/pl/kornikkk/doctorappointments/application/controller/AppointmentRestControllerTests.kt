@@ -90,7 +90,7 @@ class AppointmentRestControllerTests : AnnotationSpec() {
                 |}
                 |""".trimMargin()
 
-        every { service.scheduleAppointment(patientId, doctorId, location, LocalDateTime.of(date, time)) } returns id
+        every { service.schedule(patientId, doctorId, location, LocalDateTime.of(date, time)) } returns id
 
         mockMvc.perform(
                 post("/appointments")

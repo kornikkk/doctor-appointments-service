@@ -34,7 +34,7 @@ class AppointmentServiceTests : BehaviorSpec({
         every { appointmentRepository.existsAtDateTime(patientId, doctorId, conflictingDateTime) } returns true
 
         When("scheduling appointment") {
-            appointmentService.scheduleAppointment(patientId, doctorId, location, dateTime)
+            appointmentService.schedule(patientId, doctorId, location, dateTime)
 
             Then("appointment is scheduled") {
                 verify { appointmentRepository.save(any()) }
@@ -42,7 +42,7 @@ class AppointmentServiceTests : BehaviorSpec({
         }
         When("scheduling conflicting appointment") {
             shouldThrow<ConflictingAppointmentException> {
-                appointmentService.scheduleAppointment(patientId, doctorId, location, conflictingDateTime)
+                appointmentService.schedule(patientId, doctorId, location, conflictingDateTime)
             }
             Then("conflicting appointment exception is thrown") { }
         }
@@ -64,7 +64,7 @@ class AppointmentServiceTests : BehaviorSpec({
         every { appointmentRepository.existsAtDateTime(patientId, doctorId, newConflictingDateTime) } returns true
 
         When("rescheduling appointment") {
-            appointmentService.rescheduleAppointment(appointmentId, newDateTime.toLocalTime())
+            appointmentService.reschedule(appointmentId, newDateTime.toLocalTime())
 
             Then("appointment is rescheduled") {
                 verify { appointmentRepository.save(any()) }
@@ -73,13 +73,13 @@ class AppointmentServiceTests : BehaviorSpec({
 
         When("rescheduling appointment to conflicting time") {
             shouldThrow<ConflictingAppointmentException> {
-                appointmentService.rescheduleAppointment(appointmentId, newConflictingDateTime.toLocalTime())
+                appointmentService.reschedule(appointmentId, newConflictingDateTime.toLocalTime())
             }
             Then("conflicting appointment exception is thrown") { }
         }
 
         When("rescheduling appointment to conflicting time with conflicts allowed") {
-            appointmentService.rescheduleAppointment(appointmentId, newConflictingDateTime.toLocalTime(), true)
+            appointmentService.reschedule(appointmentId, newConflictingDateTime.toLocalTime(), true)
 
             Then("conflicting appointment is rescheduled") {
                 verify { appointmentRepository.save(any()) }
@@ -97,7 +97,7 @@ class AppointmentServiceTests : BehaviorSpec({
         every { appointmentRepository.deleteById(any()) } returns mockk()
 
         When("getting existing appointment") {
-            val foundAppointment = appointmentService.getAppointment(existingAppointmentId)
+            val foundAppointment = appointmentService.get(existingAppointmentId)
 
             Then("appointment is found") {
                 foundAppointment shouldBe appointment
@@ -106,7 +106,7 @@ class AppointmentServiceTests : BehaviorSpec({
 
         When("getting not existing appointment") {
             val exception = shouldThrow<AppointmentNotFoundException> {
-                appointmentService.getAppointment(notExistingAppointmentId)
+                appointmentService.get(notExistingAppointmentId)
             }
             Then("exception with appointment id is thrown") {
                 exception.message shouldContain notExistingAppointmentId.toString()

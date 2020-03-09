@@ -23,7 +23,7 @@ class AppointmentRestController(private val appointmentService: AppointmentServi
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun add(@RequestBody request: NewAppointmentRequest): ResponseEntity<Any> =
-            createdWithLocationResponse(appointmentService.scheduleAppointment(
+            createdWithLocationResponse(appointmentService.schedule(
                     request.patientId,
                     request.doctorId,
                     request.location,
@@ -33,7 +33,7 @@ class AppointmentRestController(private val appointmentService: AppointmentServi
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun findById(@PathVariable id: UUID): AppointmentResource =
-            appointmentService.getAppointment(id).toResource()
+            appointmentService.get(id).toResource()
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
