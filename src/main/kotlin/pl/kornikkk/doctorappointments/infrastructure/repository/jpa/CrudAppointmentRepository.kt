@@ -17,6 +17,12 @@ class CrudAppointmentRepository(private val crudRepository: SpringDataCrudAppoin
     override fun findById(id: UUID): Appointment? =
             crudRepository.findByIdOrNull(id)?.toDomain()
 
+    override fun findAll(): List<Appointment> =
+            crudRepository.findAll().map(AppointmentEntity::toDomain)
+
+    override fun findAllByPatientId(patientId: UUID): List<Appointment> =
+            crudRepository.findAllByPatientId(patientId).map(AppointmentEntity::toDomain)
+
     override fun save(appointment: Appointment): Appointment =
             crudRepository.save(appointment.toEntity(entityManager)).toDomain()
 

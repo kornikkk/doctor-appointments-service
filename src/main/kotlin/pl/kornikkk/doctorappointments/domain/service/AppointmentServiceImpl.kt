@@ -22,6 +22,12 @@ class AppointmentServiceImpl(private val appointmentRepository: AppointmentRepos
     override fun getAppointment(id: UUID): Appointment =
             appointmentRepository.findById(id) ?: throw AppointmentNotFoundException(id)
 
+    override fun findAll(): List<Appointment> =
+            appointmentRepository.findAll()
+
+    override fun findAllByPatientId(patientId: UUID): List<Appointment> =
+            appointmentRepository.findAllByPatientId(patientId)
+
     override fun rescheduleAppointment(id: UUID, newTime: LocalTime, allowConflicts: Boolean) {
         val appointment = getAppointment(id)
         val newDateTime = appointment.dateTime.with(newTime)

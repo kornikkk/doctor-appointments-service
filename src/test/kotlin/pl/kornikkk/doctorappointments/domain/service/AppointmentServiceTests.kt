@@ -121,4 +121,27 @@ class AppointmentServiceTests : BehaviorSpec({
             }
         }
     }
+
+    Given("appointments and patient ID") {
+        val patientId = UUID.randomUUID()
+
+        every { appointmentRepository.findAll() } returns listOf()
+        every { appointmentRepository.findAllByPatientId(patientId) } returns listOf()
+
+        When("getting all appointments") {
+            appointmentService.findAll()
+
+            Then("all appointments are fetched") {
+                verify { appointmentRepository.findAll() }
+            }
+        }
+
+        When("getting patient appointments") {
+            appointmentService.findAllByPatientId(patientId)
+
+            Then("all appointments are fetched") {
+                verify { appointmentRepository.findAllByPatientId(patientId) }
+            }
+        }
+    }
 })
