@@ -6,9 +6,9 @@ import java.time.LocalTime
 import java.util.*
 
 data class AppointmentResource(
-        var id: UUID,
-        var patientId: UUID,
-        var doctorId: UUID,
+        val id: UUID,
+        val patientId: UUID,
+        val doctorId: UUID,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
         val date: LocalDate,
