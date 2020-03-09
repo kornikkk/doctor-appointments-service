@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import pl.kornikkk.doctorappointments.application.controller.request.ModifyResourceRequest
 import pl.kornikkk.doctorappointments.application.controller.request.NewAppointmentRequest
 import pl.kornikkk.doctorappointments.application.controller.response.AppointmentResource
 import pl.kornikkk.doctorappointments.application.controller.utils.createdWithLocationResponse
@@ -13,6 +14,8 @@ import pl.kornikkk.doctorappointments.domain.Appointment
 import pl.kornikkk.doctorappointments.domain.exception.DoctorNotFoundException
 import pl.kornikkk.doctorappointments.domain.service.AppointmentService
 import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @RestController
@@ -35,6 +38,13 @@ class AppointmentRestController(private val appointmentService: AppointmentServi
     fun findById(@PathVariable id: UUID): AppointmentResource =
             appointmentService.get(id).toResource()
 
+    @PatchMapping("/{id}")
+    fun modify(@PathVariable id: UUID, @RequestBody request: ModifyResourceRequest): ResponseEntity<Any> = when (request.op) {
+        "reschedule" -> reschedule(id, request.path, request.value, false)
+        "reschedule_allow_conflicts" -> reschedule(id, request.path, request.value, true)
+        else -> ResponseEntity.badRequest().build()
+    }
+
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun find(@RequestParam patientId: UUID?): List<AppointmentResource> = when {
@@ -55,4 +65,13 @@ class AppointmentRestController(private val appointmentService: AppointmentServi
         log.debug(notFoundException.message)
     }
 
+    private fun reschedule(id: UUID, path: String, value: Any, allowConflicts: Boolean): ResponseEntity<Any> = when {
+        path != "/time" || value !is String ->
+            ResponseEntity.badRequest().build()
+        else -> {
+            val newTime = LocalTime.parse(value, DateTimeFormatter.ofPattern("HH:mm"))
+            appointmentService.reschedule(id, newTime, allowConflicts)
+            ResponseEntity.noContent().build()
+        }
+    }
 }

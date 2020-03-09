@@ -110,4 +110,48 @@ class AppointmentRestControllerTests : AnnotationSpec() {
                 .andExpect(status().is2xxSuccessful)
 
     }
+
+    @Test
+    fun `appointments PATCH with operation 'reschedule' should reschedule appointment`() {
+        val id = UUID.randomUUID()
+        val newTime = LocalTime.of(12, 30)
+
+        val requestBody = """
+                |{
+                |  "op" : "reschedule",
+                |  "path" : "/time",
+                |  "value" : "${newTime.format(DateTimeFormatter.ofPattern("HH:mm"))}"
+                |}
+                |""".trimMargin()
+
+        every { service.reschedule(id, newTime, false) } returns mockk()
+
+        mockMvc.perform(patch("/appointments/$id")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().is2xxSuccessful)
+
+    }
+
+    @Test
+    fun `appointments PATCH with operation 'reschedule_allow_conflicts' should reschedule appointment`() {
+        val id = UUID.randomUUID()
+        val newTime = LocalTime.of(12, 30)
+
+        val requestBody = """
+                |{
+                |  "op" : "reschedule_allow_conflicts",
+                |  "path" : "/time",
+                |  "value" : "${newTime.format(DateTimeFormatter.ofPattern("HH:mm"))}"
+                |}
+                |""".trimMargin()
+
+        every { service.reschedule(id, newTime, true) } returns mockk()
+
+        mockMvc.perform(patch("/appointments/$id")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().is2xxSuccessful)
+
+    }
 }
