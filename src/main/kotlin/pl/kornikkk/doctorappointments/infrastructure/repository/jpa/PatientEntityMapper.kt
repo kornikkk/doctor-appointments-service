@@ -1,20 +1,17 @@
 package pl.kornikkk.doctorappointments.infrastructure.repository.jpa
 
 import pl.kornikkk.doctorappointments.domain.Patient
-import javax.persistence.EntityManager
 
 fun PatientEntity.toDomain() = Patient(
         id,
         firstName,
         lastName,
-        address,
-        appointments.map { it.id!! }
+        address
 )
 
-fun Patient.toEntity(entityManager: EntityManager) = PatientEntity(
+fun Patient.toEntity() = PatientEntity(
         id,
         firstName,
         lastName,
-        address,
-        appointmentIds.map { entityManager.getReference(AppointmentEntity::class.java, it) }.toMutableList()
+        address
 )

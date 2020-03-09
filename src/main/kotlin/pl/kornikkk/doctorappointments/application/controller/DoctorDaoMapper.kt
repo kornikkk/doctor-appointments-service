@@ -4,7 +4,7 @@ import pl.kornikkk.doctorappointments.application.controller.request.UpdateDocto
 import pl.kornikkk.doctorappointments.application.controller.response.DoctorResource
 import pl.kornikkk.doctorappointments.domain.Doctor
 
-fun Doctor.toResource() = DoctorResource(id!!, firstName, lastName, appointmentIds)
+fun Doctor.toResource() = DoctorResource(id!!, firstName, lastName)
 
 fun Doctor.update(request: UpdateDoctorRequest): Doctor {
     firstName = request.firstName
