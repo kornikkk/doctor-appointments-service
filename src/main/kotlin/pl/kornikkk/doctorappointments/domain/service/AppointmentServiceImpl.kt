@@ -3,6 +3,8 @@ package pl.kornikkk.doctorappointments.domain.service
 import pl.kornikkk.doctorappointments.domain.Appointment
 import pl.kornikkk.doctorappointments.domain.exception.AppointmentNotFoundException
 import pl.kornikkk.doctorappointments.domain.exception.ConflictingAppointmentException
+import pl.kornikkk.doctorappointments.domain.exception.DoctorNotFoundException
+import pl.kornikkk.doctorappointments.domain.exception.PatientNotFoundException
 import pl.kornikkk.doctorappointments.domain.repository.AppointmentRepository
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -12,11 +14,15 @@ class AppointmentServiceImpl(private val appointmentRepository: AppointmentRepos
                              private val patientService: PatientService,
                              private val doctorService: DoctorService) : AppointmentService {
 
-    override fun schedule(patientId: UUID, doctorId: UUID, location: String, dateTime: LocalDateTime): UUID {
-        if (isConflictingAnotherAppointment(patientId, doctorId, dateTime)) {
+    override fun schedule(patientId: UUID, doctorId: UUID, location: String, dateTime: LocalDateTime): UUID = when {
+        !patientService.existsById(patientId) ->
+            throw PatientNotFoundException(patientId)
+        !doctorService.existsById(doctorId) ->
+            throw DoctorNotFoundException(doctorId)
+        isConflictingAnotherAppointment(patientId, doctorId, dateTime) ->
             throw ConflictingAppointmentException(patientId, doctorId, dateTime)
-        }
-        return appointmentRepository.save(Appointment(patientId, doctorId, location, dateTime)).id!!
+        else ->
+            appointmentRepository.save(Appointment(patientId, doctorId, location, dateTime)).id!!
     }
 
     override fun get(id: UUID): Appointment =
