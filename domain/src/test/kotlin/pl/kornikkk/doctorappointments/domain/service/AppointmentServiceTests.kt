@@ -33,6 +33,9 @@ class AppointmentServiceTests : BehaviorSpec({
         every { appointmentRepository.existsAtDateTime(patientId, doctorId, dateTime) } returns false
         every { appointmentRepository.existsAtDateTime(patientId, doctorId, conflictingDateTime) } returns true
 
+        every { patientService.existsById(patientId) } returns true
+        every { doctorService.existsById(doctorId) } returns true
+
         When("scheduling appointment") {
             appointmentService.schedule(patientId, doctorId, location, dateTime)
 
