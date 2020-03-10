@@ -1,20 +1,19 @@
 package pl.kornikkk.doctorappointments.infrastructure.repository.jpa
 
 import pl.kornikkk.doctorappointments.domain.Appointment
-import javax.persistence.EntityManager
 
 fun AppointmentEntity.toDomain() = Appointment(
         id,
-        patient.id!!,
-        doctor.id!!,
+        patientId,
+        doctorId,
         location,
         dateTime
 )
 
-fun Appointment.toEntity(entityManager: EntityManager) = AppointmentEntity(
+fun Appointment.toEntity() = AppointmentEntity(
         id,
-        entityManager.getReference(PatientEntity::class.java, patientId),
-        entityManager.getReference(DoctorEntity::class.java, doctorId),
+        patientId,
+        doctorId,
         location,
         dateTime
 )

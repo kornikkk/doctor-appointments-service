@@ -1,7 +1,9 @@
 package pl.kornikkk.doctorappointments.infrastructure.repository.jpa
 
 import java.util.*
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Table
 
 @Entity
 @Table(name = "patient")
@@ -11,9 +13,5 @@ class PatientEntity(
         lastName: String,
 
         @Column(nullable = false)
-        var address: String,
-
-        @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY, mappedBy = "patient")
-        var appointments: MutableList<AppointmentEntity> = mutableListOf()
-
+        var address: String
 ) : PersonEntity(id, firstName, lastName)

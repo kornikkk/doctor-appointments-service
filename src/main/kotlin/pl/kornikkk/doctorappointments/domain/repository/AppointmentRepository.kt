@@ -11,4 +11,6 @@ interface AppointmentRepository {
     fun save(appointment: Appointment): Appointment
     fun existsAtDateTime(patientId: UUID, doctorId: UUID, dateTime: LocalDateTime): Boolean
     fun deleteById(id: UUID)
+    fun deleteByPatientId(patientId: UUID)
+    fun deleteByDoctorId(doctorId: UUID)
 }

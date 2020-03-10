@@ -7,7 +7,6 @@ import javax.persistence.*
 class PersonEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        @Access(AccessType.PROPERTY)
         var id: UUID?,
 
         @Column(nullable = false)

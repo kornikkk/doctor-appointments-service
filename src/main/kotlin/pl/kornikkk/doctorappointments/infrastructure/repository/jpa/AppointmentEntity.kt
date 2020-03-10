@@ -9,16 +9,13 @@ import javax.persistence.*
 class AppointmentEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        @Access(AccessType.PROPERTY)
         var id: UUID?,
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "patient_id")
-        var patient: PatientEntity,
+        @Column(nullable = false)
+        var patientId: UUID,
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "doctor_id")
-        var doctor: DoctorEntity,
+        @Column(nullable = false)
+        var doctorId: UUID,
 
         @Column(nullable = false)
         var location: String,

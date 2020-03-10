@@ -15,7 +15,7 @@ import java.util.*
 class PatientServiceTests : BehaviorSpec({
 
     val patientRepository: PatientRepository = mockk()
-    val patientService: PatientService = PatientServiceImpl(patientRepository)
+    val patientService: PatientService = PatientServiceImpl(patientRepository, mockk(relaxed = true))
 
     Given("new patient data") {
         val firstName = "Test"

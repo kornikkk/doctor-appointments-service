@@ -7,8 +7,11 @@ import java.util.*
 
 class CrudDoctorRepository(private val crudRepository: SpringDataCrudDoctorRepository) : DoctorRepository {
 
-    override fun findById(id: UUID) =
+    override fun findById(id: UUID): Doctor? =
             crudRepository.findByIdOrNull(id)?.toDomain()
+
+    override fun existsById(id: UUID): Boolean =
+            crudRepository.existsById(id)
 
     override fun save(doctor: Doctor): Doctor =
             crudRepository.save(doctor.toEntity()).toDomain()

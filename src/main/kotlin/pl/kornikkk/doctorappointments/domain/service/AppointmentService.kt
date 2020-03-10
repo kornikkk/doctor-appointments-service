@@ -12,4 +12,6 @@ interface AppointmentService {
     fun findAllByPatientId(patientId: UUID): List<Appointment>
     fun reschedule(id: UUID, newTime: LocalTime, allowConflicts: Boolean = false)
     fun delete(id: UUID)
+    fun deletePatientAppointments(patientId: UUID)
+    fun deleteDoctorAppointments(doctorId: UUID)
 }

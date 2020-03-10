@@ -5,14 +5,9 @@ import pl.kornikkk.doctorappointments.domain.Appointment
 import pl.kornikkk.doctorappointments.domain.repository.AppointmentRepository
 import java.time.LocalDateTime
 import java.util.*
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
 
 
 class CrudAppointmentRepository(private val crudRepository: SpringDataCrudAppointmentRepository) : AppointmentRepository {
-
-    @PersistenceContext
-    private lateinit var entityManager: EntityManager
 
     override fun findById(id: UUID): Appointment? =
             crudRepository.findByIdOrNull(id)?.toDomain()
@@ -24,7 +19,7 @@ class CrudAppointmentRepository(private val crudRepository: SpringDataCrudAppoin
             crudRepository.findAllByPatientId(patientId).map(AppointmentEntity::toDomain)
 
     override fun save(appointment: Appointment): Appointment =
-            crudRepository.save(appointment.toEntity(entityManager)).toDomain()
+            crudRepository.save(appointment.toEntity()).toDomain()
 
     override fun existsAtDateTime(patientId: UUID, doctorId: UUID, dateTime: LocalDateTime): Boolean =
             crudRepository.existsAtDateTime(patientId, doctorId, dateTime)
@@ -33,4 +28,11 @@ class CrudAppointmentRepository(private val crudRepository: SpringDataCrudAppoin
         crudRepository.deleteById(id)
     }
 
+    override fun deleteByPatientId(patientId: UUID) {
+        crudRepository.deleteByPatientId(patientId)
+    }
+
+    override fun deleteByDoctorId(doctorId: UUID) {
+        crudRepository.deleteByDoctorId(doctorId)
+    }
 }
