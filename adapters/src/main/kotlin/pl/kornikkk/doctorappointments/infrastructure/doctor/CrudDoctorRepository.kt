@@ -10,6 +10,9 @@ class CrudDoctorRepository(private val crudRepository: SpringDataCrudDoctorRepos
     override fun findById(id: UUID): Doctor? =
             crudRepository.findByIdOrNull(id)?.toDomain()
 
+    override fun findAll(): List<Doctor> =
+            crudRepository.findAll().map(DoctorEntity::toDomain)
+
     override fun existsById(id: UUID): Boolean =
             crudRepository.existsById(id)
 

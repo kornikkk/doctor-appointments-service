@@ -4,6 +4,7 @@ import java.util.*
 
 interface DoctorRepository {
     fun findById(id: UUID): Doctor?
+    fun findAll(): List<Doctor>
     fun existsById(id: UUID): Boolean
     fun save(doctor: Doctor): Doctor
     fun deleteById(id: UUID)

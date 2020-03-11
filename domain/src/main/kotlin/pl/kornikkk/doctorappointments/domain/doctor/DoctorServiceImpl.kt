@@ -11,6 +11,9 @@ class DoctorServiceImpl(
     override fun get(id: UUID) =
             doctorRepository.findById(id) ?: throw DoctorNotFoundException(id)
 
+    override fun findAll(): List<Doctor> =
+            doctorRepository.findAll()
+
     override fun existsById(id: UUID): Boolean =
             doctorRepository.existsById(id)
 

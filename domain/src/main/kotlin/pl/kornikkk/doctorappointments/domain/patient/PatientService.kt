@@ -4,6 +4,7 @@ import java.util.*
 
 interface PatientService {
     fun get(id: UUID): Patient
+    fun findAll(): List<Patient>
     fun existsById(id: UUID): Boolean
     fun create(firstName: String, lastName: String, address: Address): UUID
     fun update(patient: Patient)

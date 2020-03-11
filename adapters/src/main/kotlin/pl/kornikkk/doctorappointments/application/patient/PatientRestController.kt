@@ -9,6 +9,7 @@ import pl.kornikkk.doctorappointments.application.commons.controller.createError
 import pl.kornikkk.doctorappointments.application.commons.controller.createdWithLocationResponse
 import pl.kornikkk.doctorappointments.application.commons.utils.Logging
 import pl.kornikkk.doctorappointments.application.commons.utils.logger
+import pl.kornikkk.doctorappointments.domain.patient.Patient
 import pl.kornikkk.doctorappointments.domain.patient.PatientNotFoundException
 import pl.kornikkk.doctorappointments.domain.patient.PatientService
 import java.util.*
@@ -22,6 +23,11 @@ class PatientRestController(private val patientService: PatientService) : Loggin
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun add(@RequestBody request: NewPatientRequest): ResponseEntity<Any> =
             createdWithLocationResponse(patientService.create(request.firstName, request.lastName, request.address))
+
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.OK)
+    fun findAll(): List<PatientResource> =
+            patientService.findAll().map(Patient::toResource)
 
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)

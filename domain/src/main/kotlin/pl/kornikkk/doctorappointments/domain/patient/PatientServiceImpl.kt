@@ -11,6 +11,9 @@ class PatientServiceImpl(
     override fun get(id: UUID): Patient =
             patientRepository.findById(id) ?: throw PatientNotFoundException(id)
 
+    override fun findAll(): List<Patient> =
+            patientRepository.findAll()
+
     override fun existsById(id: UUID): Boolean =
             patientRepository.existsById(id)
 
