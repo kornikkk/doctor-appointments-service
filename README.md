@@ -4,6 +4,6 @@ Service for scheduling doctor appointments implemented with Spring Boot, Kotlin 
 ## Project structure
 Project contains domain and adapters modules.
 ### Domain module
-No dependencies to Spring etc.
+Bussiness logic, interfaces, no dependencies to Spring etc.
 ### Adapters module
 Contains RestControllers, JPA entities etc.
