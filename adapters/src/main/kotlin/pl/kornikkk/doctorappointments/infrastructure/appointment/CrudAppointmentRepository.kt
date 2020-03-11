@@ -22,7 +22,7 @@ class CrudAppointmentRepository(private val crudRepository: SpringDataCrudAppoin
             crudRepository.save(appointment.toEntity()).toDomain()
 
     override fun existsByPatientIdOrDoctorIdAtDateTime(patientId: UUID, doctorId: UUID, dateTime: LocalDateTime): Boolean =
-            crudRepository.existsAtDateTime(patientId, doctorId, dateTime)
+            crudRepository.existsByPatientIdOrDoctorIdAtDateTime(patientId, doctorId, dateTime)
 
     override fun deleteById(id: UUID) {
         crudRepository.deleteById(id)

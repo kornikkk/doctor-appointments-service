@@ -41,7 +41,7 @@ class SpringDataCrudAppointmentRepositoryTest : AnnotationSpec() {
         appointmentRepository.save(AppointmentEntity(null, patientId, doctorId, "Test location", dateTime))
 
         //then
-        appointmentRepository.existsAtDateTime(patientId, doctorId, dateTime) shouldBe true
+        appointmentRepository.existsByPatientIdOrDoctorIdAtDateTime(patientId, doctorId, dateTime) shouldBe true
     }
 
     @Test
@@ -58,6 +58,6 @@ class SpringDataCrudAppointmentRepositoryTest : AnnotationSpec() {
         appointmentRepository.save(AppointmentEntity(null, patientId, doctorId, "Test location", dateTime))
 
         //then
-        appointmentRepository.existsAtDateTime(patientId, doctorId, anotherDateTime) shouldBe false
+        appointmentRepository.existsByPatientIdOrDoctorIdAtDateTime(patientId, doctorId, anotherDateTime) shouldBe false
     }
 }
