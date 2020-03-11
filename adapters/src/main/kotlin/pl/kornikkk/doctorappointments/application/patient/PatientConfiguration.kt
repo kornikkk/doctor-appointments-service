@@ -7,15 +7,9 @@ import pl.kornikkk.doctorappointments.domain.commons.events.EventPublisher
 import pl.kornikkk.doctorappointments.domain.patient.PatientRepository
 import pl.kornikkk.doctorappointments.domain.patient.PatientService
 import pl.kornikkk.doctorappointments.domain.patient.PatientServiceImpl
-import pl.kornikkk.doctorappointments.infrastructure.patient.CrudPatientRepository
-import pl.kornikkk.doctorappointments.infrastructure.patient.SpringDataCrudPatientRepository
 
 @Configuration
 class PatientConfiguration {
-
-    @Bean
-    fun patientRepository(patientCrudRepository: SpringDataCrudPatientRepository): PatientRepository =
-            CrudPatientRepository(patientCrudRepository)
 
     @Bean
     fun patientService(patientRepository: PatientRepository, eventPublisher: EventPublisher): PatientService =
