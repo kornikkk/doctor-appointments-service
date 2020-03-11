@@ -66,7 +66,8 @@ class DoctorRestControllerTests : AnnotationSpec() {
         val requestBody = """
                 |{
                 |  "firstName" : "Test",
-                |  "lastName" : "Doctor"
+                |  "lastName" : "Doctor",
+                |  "specialization" : "Dentist"
                 |}
                 |""".trimMargin()
 
