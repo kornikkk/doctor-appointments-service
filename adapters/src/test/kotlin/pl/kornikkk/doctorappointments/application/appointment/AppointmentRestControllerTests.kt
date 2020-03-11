@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import pl.kornikkk.doctorappointments.domain.appointment.Appointment
 import pl.kornikkk.doctorappointments.domain.appointment.AppointmentService
+import pl.kornikkk.doctorappointments.domain.appointment.ConflictingAppointmentException
+import pl.kornikkk.doctorappointments.domain.patient.PatientNotFoundException
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -100,6 +102,28 @@ class AppointmentRestControllerTests : AnnotationSpec() {
     }
 
     @Test
+    fun `appointments POST shouldn't schedule appointment for not existing patient`() {
+        val patientId = UUID.randomUUID()
+        val requestBody = """
+                |{
+                |  "patientId" : "$patientId",
+                |  "doctorId" : "${UUID.randomUUID()}",
+                |  "location" : "Test clinic",
+                |  "date" : "${LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}",
+                |  "time" : "${LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))}"
+                |}
+                |""".trimMargin()
+
+        every { service.schedule(patientId, any(), any(), any(), any()) } throws PatientNotFoundException(patientId)
+
+        mockMvc.perform(
+                post("/appointments")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isNotFound)
+    }
+
+    @Test
     fun `appointments DELETE should delete appointment`() {
         val id = UUID.randomUUID()
 
@@ -129,6 +153,30 @@ class AppointmentRestControllerTests : AnnotationSpec() {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().is2xxSuccessful)
+
+    }
+
+    @Test
+    fun `appointments PATCH with operation 'reschedule' shouldn't reschedule conflicting appointment`() {
+        val id = UUID.randomUUID()
+        val newTime = LocalTime.of(12, 30)
+
+        val requestBody = """
+                |{
+                |  "op" : "reschedule",
+                |  "path" : "/time",
+                |  "value" : "${newTime.format(DateTimeFormatter.ofPattern("HH:mm"))}"
+                |}
+                |""".trimMargin()
+
+        every {
+            service.reschedule(id, newTime, false)
+        } throws ConflictingAppointmentException(UUID.randomUUID(), UUID.randomUUID(), LocalDate.now(), newTime)
+
+        mockMvc.perform(patch("/appointments/$id")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isUnprocessableEntity)
 
     }
 
