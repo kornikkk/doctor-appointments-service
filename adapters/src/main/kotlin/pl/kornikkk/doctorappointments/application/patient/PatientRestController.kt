@@ -4,8 +4,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import pl.kornikkk.doctorappointments.application.commons.controller.ErrorResponse
+import pl.kornikkk.doctorappointments.application.commons.controller.createErrorResponse
+import pl.kornikkk.doctorappointments.application.commons.controller.createdWithLocationResponse
 import pl.kornikkk.doctorappointments.application.commons.utils.Logging
-import pl.kornikkk.doctorappointments.application.commons.utils.createdWithLocationResponse
 import pl.kornikkk.doctorappointments.application.commons.utils.logger
 import pl.kornikkk.doctorappointments.domain.patient.PatientNotFoundException
 import pl.kornikkk.doctorappointments.domain.patient.PatientService
@@ -40,8 +42,9 @@ class PatientRestController(private val patientService: PatientService) : Loggin
 
     @ExceptionHandler(PatientNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleNotFound(notFoundException: PatientNotFoundException) {
+    fun handleNotFound(notFoundException: PatientNotFoundException): ResponseEntity<ErrorResponse> {
         log.debug(notFoundException.message)
+        return createErrorResponse(notFoundException, HttpStatus.NOT_FOUND)
     }
 
 }

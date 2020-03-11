@@ -4,12 +4,15 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import pl.kornikkk.doctorappointments.application.commons.controller.ErrorResponse
+import pl.kornikkk.doctorappointments.application.commons.controller.createErrorResponse
+import pl.kornikkk.doctorappointments.application.commons.controller.createdWithLocationResponse
 import pl.kornikkk.doctorappointments.application.commons.utils.Logging
-import pl.kornikkk.doctorappointments.application.commons.utils.createdWithLocationResponse
 import pl.kornikkk.doctorappointments.application.commons.utils.logger
 import pl.kornikkk.doctorappointments.domain.appointment.Appointment
 import pl.kornikkk.doctorappointments.domain.appointment.AppointmentNotFoundException
 import pl.kornikkk.doctorappointments.domain.appointment.AppointmentService
+import pl.kornikkk.doctorappointments.domain.appointment.ConflictingAppointmentException
 import pl.kornikkk.doctorappointments.domain.doctor.DoctorNotFoundException
 import pl.kornikkk.doctorappointments.domain.patient.PatientNotFoundException
 import java.time.LocalTime
@@ -59,9 +62,15 @@ class AppointmentRestController(private val appointmentService: AppointmentServi
     }
 
     @ExceptionHandler(AppointmentNotFoundException::class, DoctorNotFoundException::class, PatientNotFoundException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleNotFound(exception: Exception) {
+    fun handleNotFound(exception: Exception): ResponseEntity<ErrorResponse> {
         log.debug(exception.message)
+        return createErrorResponse(exception, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(ConflictingAppointmentException::class)
+    fun handleConflictingAppointment(exception: Exception): ResponseEntity<ErrorResponse> {
+        log.debug(exception.message)
+        return createErrorResponse(exception, HttpStatus.UNPROCESSABLE_ENTITY)
     }
 
     private fun reschedule(id: UUID, path: String, value: Any, allowConflicts: Boolean): ResponseEntity<Any> = when {
