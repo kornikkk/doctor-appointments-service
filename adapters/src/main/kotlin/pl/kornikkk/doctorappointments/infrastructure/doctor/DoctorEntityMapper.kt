@@ -5,11 +5,13 @@ import pl.kornikkk.doctorappointments.domain.doctor.Doctor
 fun DoctorEntity.toDomain() = Doctor(
         id,
         firstName,
-        lastName
+        lastName,
+        specialization
 )
 
 fun Doctor.toEntity() = DoctorEntity(
         id,
         firstName,
-        lastName
+        lastName,
+        specialization
 )

@@ -17,11 +17,12 @@ class DoctorServiceTests : BehaviorSpec({
     Given("new doctor data") {
         val firstName = "Test"
         val lastName = "Doctor"
+        val specialization = "Dentist"
 
         every { doctorRepository.save(any()) } returns mockk(relaxed = true)
 
         When("creating doctor") {
-            doctorService.create(firstName, lastName)
+            doctorService.create(firstName, lastName, specialization)
 
             Then("doctor is created") {
                 verify { doctorRepository.save(any()) }

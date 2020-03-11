@@ -33,7 +33,7 @@ class SpringDataCrudAppointmentRepositoryTest : AnnotationSpec() {
         //given
         val address = AddressEntity("Street 2/3", "City")
         val patientId = patientRepository.save(PatientEntity(null, "Test", "Patient", address)).id!!
-        val doctorId = doctorRepository.save(DoctorEntity(null, "Test", "Doctor")).id!!
+        val doctorId = doctorRepository.save(DoctorEntity(null, "Test", "Doctor", "Dentist")).id!!
 
         val dateTime = LocalDateTime.of(2020, 3, 8, 9, 30)
 
@@ -49,7 +49,7 @@ class SpringDataCrudAppointmentRepositoryTest : AnnotationSpec() {
         //given
         val address = AddressEntity("Street 2/3", "City")
         val patientId = patientRepository.save(PatientEntity(null, "Test", "Patient", address)).id!!
-        val doctorId = doctorRepository.save(DoctorEntity(null, "Test", "Doctor")).id!!
+        val doctorId = doctorRepository.save(DoctorEntity(null, "Test", "Doctor", "Dentist")).id!!
 
         val dateTime = LocalDateTime.of(2020, 3, 8, 9, 30)
         val anotherDateTime = LocalDateTime.of(2020, 3, 8, 7, 30)

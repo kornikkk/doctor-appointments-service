@@ -39,15 +39,17 @@ class DoctorRestControllerTests : AnnotationSpec() {
         val id = UUID.randomUUID()
         val firstName = "Test"
         val lastName = "Doctor"
+        val specialization = "Dentist"
 
         val requestBody = """
                 |{
                 |  "firstName" : "$firstName",
-                |  "lastName" : "$lastName"
+                |  "lastName" : "$lastName",
+                |  "specialization" : "$specialization"
                 |}
                 |""".trimMargin()
 
-        every { service.create(firstName, lastName) } returns id
+        every { service.create(firstName, lastName, specialization) } returns id
 
         mockMvc.perform(
                 post("/doctors")

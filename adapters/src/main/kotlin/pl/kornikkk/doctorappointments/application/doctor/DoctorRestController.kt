@@ -19,7 +19,7 @@ class DoctorRestController(private val doctorService: DoctorService) : Logging {
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun add(@RequestBody request: NewDoctorRequest): ResponseEntity<Any> =
-            createdWithLocationResponse(doctorService.create(request.firstName, request.lastName))
+            createdWithLocationResponse(doctorService.create(request.firstName, request.lastName, request.specialization))
 
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)

@@ -14,5 +14,7 @@ class DoctorEntity(
         var firstName: String,
 
         @Column(nullable = false)
-        var lastName: String
+        var lastName: String,
+
+        var specialization: String
 )

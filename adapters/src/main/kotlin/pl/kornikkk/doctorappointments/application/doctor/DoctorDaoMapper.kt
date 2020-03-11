@@ -7,5 +7,6 @@ fun Doctor.toResource() = DoctorResource(id!!, firstName, lastName)
 fun Doctor.update(request: UpdateDoctorRequest): Doctor {
     firstName = request.firstName
     lastName = request.lastName
+    specialization = request.specialization
     return this
 }

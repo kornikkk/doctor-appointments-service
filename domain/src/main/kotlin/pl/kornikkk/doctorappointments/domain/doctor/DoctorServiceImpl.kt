@@ -14,8 +14,8 @@ class DoctorServiceImpl(
     override fun existsById(id: UUID): Boolean =
             doctorRepository.existsById(id)
 
-    override fun create(firstName: String, lastName: String) =
-            doctorRepository.save(Doctor(firstName, lastName)).id!!
+    override fun create(firstName: String, lastName: String, specialization: String) =
+            doctorRepository.save(Doctor(firstName, lastName, specialization)).id!!
 
     override fun update(doctor: Doctor) {
         doctorRepository.save(doctor)
