@@ -4,6 +4,7 @@ import pl.kornikkk.doctorappointments.domain.doctor.DoctorNotFoundException
 import pl.kornikkk.doctorappointments.domain.doctor.DoctorService
 import pl.kornikkk.doctorappointments.domain.patient.PatientNotFoundException
 import pl.kornikkk.doctorappointments.domain.patient.PatientService
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
@@ -12,15 +13,15 @@ class AppointmentServiceImpl(private val appointmentRepository: AppointmentRepos
                              private val patientService: PatientService,
                              private val doctorService: DoctorService) : AppointmentService {
 
-    override fun schedule(patientId: UUID, doctorId: UUID, location: String, dateTime: LocalDateTime): UUID = when {
+    override fun schedule(patientId: UUID, doctorId: UUID, location: String, date: LocalDate, time: LocalTime): UUID = when {
         !patientService.existsById(patientId) ->
             throw PatientNotFoundException(patientId)
         !doctorService.existsById(doctorId) ->
             throw DoctorNotFoundException(doctorId)
-        isConflictingAnotherAppointment(patientId, doctorId, dateTime) ->
-            throw ConflictingAppointmentException(patientId, doctorId, dateTime)
+        isConflictingAnotherAppointment(patientId, doctorId, date, time) ->
+            throw ConflictingAppointmentException(patientId, doctorId, date, time)
         else ->
-            appointmentRepository.save(Appointment(patientId, doctorId, location, dateTime)).id!!
+            appointmentRepository.save(Appointment(patientId, doctorId, location, date, time)).id!!
     }
 
     override fun get(id: UUID): Appointment =
@@ -34,9 +35,8 @@ class AppointmentServiceImpl(private val appointmentRepository: AppointmentRepos
 
     override fun reschedule(id: UUID, newTime: LocalTime, allowConflicts: Boolean) {
         val appointment = get(id)
-        val newDateTime = appointment.dateTime.with(newTime)
-        if (!allowConflicts && isConflictingAnotherAppointment(appointment.patientId, appointment.doctorId, newDateTime)) {
-            throw ConflictingAppointmentException(appointment.patientId, appointment.doctorId, newDateTime)
+        if (!allowConflicts && isConflictingAnotherAppointment(appointment.patientId, appointment.doctorId, appointment.date, newTime)) {
+            throw ConflictingAppointmentException(appointment.patientId, appointment.doctorId, appointment.date, newTime)
         }
         appointment.reschedule(newTime)
         appointmentRepository.save(appointment)
@@ -55,7 +55,7 @@ class AppointmentServiceImpl(private val appointmentRepository: AppointmentRepos
     }
 
 
-    private fun isConflictingAnotherAppointment(patientId: UUID, doctorId: UUID, dateTime: LocalDateTime): Boolean =
-            appointmentRepository.existsAtDateTime(patientId, doctorId, dateTime)
+    private fun isConflictingAnotherAppointment(patientId: UUID, doctorId: UUID, date: LocalDate, time: LocalTime): Boolean =
+            appointmentRepository.existsByPatientIdOrDoctorIdAtDateTime(patientId, doctorId, LocalDateTime.of(date, time))
 
 }

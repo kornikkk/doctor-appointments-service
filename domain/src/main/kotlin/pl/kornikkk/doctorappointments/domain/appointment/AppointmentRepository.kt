@@ -8,7 +8,7 @@ interface AppointmentRepository {
     fun findAll(): List<Appointment>
     fun findAllByPatientId(patientId: UUID): List<Appointment>
     fun save(appointment: Appointment): Appointment
-    fun existsAtDateTime(patientId: UUID, doctorId: UUID, dateTime: LocalDateTime): Boolean
+    fun existsByPatientIdOrDoctorIdAtDateTime(patientId: UUID, doctorId: UUID, dateTime: LocalDateTime): Boolean
     fun deleteById(id: UUID)
     fun deleteByPatientId(patientId: UUID)
     fun deleteByDoctorId(doctorId: UUID)

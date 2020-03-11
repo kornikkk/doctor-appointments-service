@@ -7,7 +7,8 @@ fun AppointmentEntity.toDomain() = Appointment(
         patientId,
         doctorId,
         location,
-        dateTime
+        dateTime.toLocalDate(),
+        dateTime.toLocalTime()
 )
 
 fun Appointment.toEntity() = AppointmentEntity(

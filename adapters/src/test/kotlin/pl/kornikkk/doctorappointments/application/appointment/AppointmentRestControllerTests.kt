@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import pl.kornikkk.doctorappointments.domain.appointment.Appointment
 import pl.kornikkk.doctorappointments.domain.appointment.AppointmentService
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -90,7 +89,7 @@ class AppointmentRestControllerTests : AnnotationSpec() {
                 |}
                 |""".trimMargin()
 
-        every { service.schedule(patientId, doctorId, location, LocalDateTime.of(date, time)) } returns id
+        every { service.schedule(patientId, doctorId, location, date, time) } returns id
 
         mockMvc.perform(
                 post("/appointments")

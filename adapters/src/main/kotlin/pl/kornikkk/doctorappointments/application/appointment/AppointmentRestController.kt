@@ -8,9 +8,10 @@ import pl.kornikkk.doctorappointments.application.commons.utils.Logging
 import pl.kornikkk.doctorappointments.application.commons.utils.createdWithLocationResponse
 import pl.kornikkk.doctorappointments.application.commons.utils.logger
 import pl.kornikkk.doctorappointments.domain.appointment.Appointment
+import pl.kornikkk.doctorappointments.domain.appointment.AppointmentNotFoundException
 import pl.kornikkk.doctorappointments.domain.appointment.AppointmentService
 import pl.kornikkk.doctorappointments.domain.doctor.DoctorNotFoundException
-import java.time.LocalDateTime
+import pl.kornikkk.doctorappointments.domain.patient.PatientNotFoundException
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -27,7 +28,8 @@ class AppointmentRestController(private val appointmentService: AppointmentServi
                     request.patientId,
                     request.doctorId,
                     request.location,
-                    LocalDateTime.of(request.date, request.time))
+                    request.date,
+                    request.time)
             )
 
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -44,7 +46,7 @@ class AppointmentRestController(private val appointmentService: AppointmentServi
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
-    fun find(@RequestParam patientId: UUID?): List<AppointmentResource> = when {
+    fun find(@RequestParam(required = false) patientId: UUID?): List<AppointmentResource> = when {
         patientId != null -> appointmentService.findAllByPatientId(patientId)
         else -> appointmentService.findAll()
     }.map(Appointment::toResource)
@@ -56,10 +58,10 @@ class AppointmentRestController(private val appointmentService: AppointmentServi
         appointmentService.delete(id)
     }
 
-    @ExceptionHandler(DoctorNotFoundException::class)
+    @ExceptionHandler(AppointmentNotFoundException::class, DoctorNotFoundException::class, PatientNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleNotFound(notFoundException: DoctorNotFoundException) {
-        log.debug(notFoundException.message)
+    fun handleNotFound(exception: Exception) {
+        log.debug(exception.message)
     }
 
     private fun reschedule(id: UUID, path: String, value: Any, allowConflicts: Boolean): ResponseEntity<Any> = when {
