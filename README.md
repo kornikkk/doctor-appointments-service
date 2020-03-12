@@ -13,7 +13,7 @@ Contains RestControllers, JPA entities, event listeners etc.
 ## User interface
 Application doesn't have any fancy user interface but there's Swagger UI available at /swagger-ui.html endpoint and auto-generated OpenAPI specification at /api-docs
 
-### Building and running
+## Building and running
 ### Building the application with gradle
 ```console
 $ gradlew build
