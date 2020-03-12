@@ -9,4 +9,4 @@ Bussiness logic, interfaces, no dependencies to Spring etc.
 Contains RestControllers, JPA entities etc.
 
 ## User interface
-Application doesn't have any fancy user interface but there's Swagger UI available at /swagger-ui endpoint and auto-generated OpenAPI specification at /api-docs
+Application doesn't have any fancy user interface but there's Swagger UI available at /swagger-ui.html endpoint and auto-generated OpenAPI specification at /api-docs
