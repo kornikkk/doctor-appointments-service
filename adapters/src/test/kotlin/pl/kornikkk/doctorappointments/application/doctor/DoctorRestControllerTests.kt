@@ -22,7 +22,7 @@ import pl.kornikkk.doctorappointments.domain.doctor.DoctorService
 import java.util.*
 
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = [DoctorRestController::class])
+@ContextConfiguration(classes = [DoctorRestController::class, DoctorExceptionHandler::class])
 @WebMvcTest
 class DoctorRestControllerTests : AnnotationSpec() {
 

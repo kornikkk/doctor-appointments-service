@@ -16,6 +16,8 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import pl.kornikkk.doctorappointments.application.doctor.DoctorExceptionHandler
+import pl.kornikkk.doctorappointments.application.patient.PatientExceptionHandler
 import pl.kornikkk.doctorappointments.domain.appointment.Appointment
 import pl.kornikkk.doctorappointments.domain.appointment.AppointmentService
 import pl.kornikkk.doctorappointments.domain.appointment.ConflictingAppointmentException
@@ -26,7 +28,12 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = [AppointmentRestController::class])
+@ContextConfiguration(classes = [
+    AppointmentRestController::class,
+    AppointmentExceptionHandler::class,
+    DoctorExceptionHandler::class,
+    PatientExceptionHandler::class
+])
 @WebMvcTest
 class AppointmentRestControllerTests : AnnotationSpec() {
 
