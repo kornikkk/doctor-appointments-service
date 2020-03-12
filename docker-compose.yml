@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  doctor-appointments-service:
+    container_name: "doctor-appointments-service"
+    image: "doctor-appointments-service"
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
